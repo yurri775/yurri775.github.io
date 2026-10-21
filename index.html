@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ayoub Amrani · eps1.0_ayoub.exe</title>
+<meta name="description" content="Ayoub Amrani, ingénieur IA : des agents et des chaînes LLM en production, qui n'ont pas le droit d'inventer.">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+<div class="scan" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span id="wipeTxt"></span></div>
+
+<!-- L'écran « piraté » -->
+<div id="intro" role="dialog" aria-label="Introduction">
+  <div class="fake">
+    <div class="fake-bar"><i></i><i></i><i></i></div>
+    <div class="fake-body"><b>Ayoub Amrani</b><span>Portfolio · Ingénieur IA</span><em></em><em></em><em class="s"></em>
+      <button class="gate" id="gate" data-i="gate"></button><small class="snd-hint" data-i="sndHint"></small></div>
+  </div>
+  <pre class="term" id="introTerm" aria-live="polite"></pre>
+  <button class="enter" id="enter" hidden data-i="enter"></button>
+  <button class="skip" id="skip" data-i="skip"></button>
+</div>
+
+<header class="bar">
+  <button id="back" class="back" hidden>cd ..</button>
+  <a href="#home" class="prompt" id="prompt">ayoub@amrani:~$<span class="cur">_</span></a>
+  <span class="sp"></span>
+  <button id="snd" class="snd" aria-label="son">♪ on</button>
+  <div class="sw" role="group" aria-label="Langue"><button data-l="fr">FR</button><button data-l="en">EN</button></div>
+  <button id="contact" class="contact" data-i="contact"></button>
+</header>
+
+<!-- Accueil : titre, puis le carrousel des 4 avatars -->
+<main class="view" id="home">
+  <div class="track">
+    <div class="stick">
+      <div class="head" id="head">
+        <p class="ep">eps1.0_ayoub.exe</p>
+        <h1 class="gl" data-text="ayoub amrani">ayoub amrani</h1>
+        <p class="lead" data-i="lead"></p>
+      </div>
+      <p class="hint" id="hint" data-i="down"></p>
+      <div class="stage" id="stage">
+        <p class="pick" data-i="pick"></p>
+        <button class="arrow" id="prev" aria-label="précédent">‹</button>
+        <div id="chars"></div>
+        <button class="arrow" id="next" aria-label="suivant">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 · exfiltration : le contact, puis la révélation -->
+  <section class="exf" id="footer">
+    <header class="st-h"><span class="no">05</span><h2 class="gl" data-gl data-i="s5"></h2></header>
+    <p class="voice" data-i="v5"></p>
+    <button class="exfil" id="exfil" data-i="exfil"></button>
+    <pre class="exlog" id="exlog" aria-live="polite"></pre>
+    <div class="links" id="links" hidden>
+      <a href="https://www.linkedin.com/in/ayoub-amrani" target="_blank" rel="noopener">linkedin ↗</a>
+      <a href="https://github.com/yurri775" target="_blank" rel="noopener">github ↗</a>
+      <button type="button" class="mail" data-copy="amraniayoub846@gmail.com">amraniayoub846@gmail.com</button>
+    </div>
+    <div class="twist" id="twist" hidden>
+      <div class="twist-txt" id="twistTxt"></div>
+      <div class="pair"><div class="who" data-char="who"></div><div class="who double" data-char="who"></div></div>
+    </div>
+    <footer class="foot">
+      <span>© 2026 Ayoub Amrani</span>
+      <button class="dont" id="dont" data-i="dont"></button>
+    </footer>
+  </section>
+</main>
+
+<!-- 01 · reconnaissance -->
+<main class="view st" id="s1">
+  <header class="st-h"><span class="no">01</span><h2 class="gl" data-gl data-i="s1"></h2></header>
+  <p class="voice" data-i="v1"></p>
+  <div class="dossier">
+    <figure class="cam"><img src="assets/photo.jpg" alt="Ayoub Amrani" width="600" height="600"><figcaption>CAM_02 · REC ●</figcaption></figure>
+    <dl id="dossier"></dl>
+    <button class="ghost-btn" id="reveal" data-i="reveal"></button>
+  </div>
+  <div class="duo" id="duo1"></div>
+  <div class="who corner br" data-char="who"></div>
+  <div class="who corner bl double" data-char="who"></div>
+</main>
+
+<!-- 02 · déchiffrement -->
+<main class="view st" id="s2">
+  <header class="st-h"><span class="no">02</span><h2 class="gl" data-gl data-i="s2"></h2></header>
+  <p class="voice" data-i="v2"></p>
+  <div class="files" id="files"></div>
+  <div class="who corner br" data-char="parcours"></div>
+</main>
+
+<!-- 03 · payload -->
+<main class="view st" id="s3">
+  <header class="st-h"><span class="no">03</span><h2 class="gl" data-gl data-i="s3"></h2></header>
+  <p class="voice" data-i="v3"></p>
+  <div class="term-box">
+    <div class="term-top"><i></i><i></i><i></i><span>visiteur@ayoub: ~/projets</span></div>
+    <div class="out" id="out" aria-live="polite"></div>
+    <form class="in" id="cmdForm" autocomplete="off"><label for="cmd">visiteur@ayoub:~$</label><input id="cmd" spellcheck="false" autocapitalize="off" enterkeyhint="go"></form>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="who corner bl" data-char="travail"></div>
+</main>
+
+<!-- 04 · ingénierie sociale -->
+<main class="view st" id="s4">
+  <header class="st-h"><span class="no">04</span><h2 class="gl" data-gl data-i="s4"></h2></header>
+  <p class="voice" data-i="v4"></p>
+  <div class="profile">
+    <div><h3 data-i="weak"></h3><ul class="notes" id="notes"></ul></div>
+    <div><h3 data-i="langs"></h3><ul class="langs" id="langs"></ul></div>
+  </div>
+  <div class="duo" id="duo4"></div>
+  <div class="who corner br" data-char="passions"></div>
+</main>
+
+<div id="crash" hidden aria-hidden="true"><pre id="crashTxt"></pre></div>
+<noscript><p class="nojs">Ayoub Amrani · ingénieur IA · amraniayoub846@gmail.com · github.com/yurri775 · linkedin.com/in/ayoub-amrani</p></noscript>
+<script src="script.js"></script>
+</body>
+</html>

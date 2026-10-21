@@ -1,0 +1,13 @@
+{
+  "name": "ayoub-portfolio",
+  "private": true,
+  "description": "eps1.0_ayoub.exe : portfolio d'Ayoub Amrani, ingénieur IA",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "npm run build && playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.0",
+    "@playwright/test": "1.47.2"
+  }
+}
