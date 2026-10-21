@@ -26,6 +26,7 @@ fs.writeFileSync(path.join(dist, ".nojekyll"), "");
 const js = fs.readFileSync(path.join(root, "script.js"), "utf8");
 const refs = new Set([...(html + js).matchAll(/assets\/[\w./-]+\.(?:webp|png|jpg|mp3)/g)].map((m) => m[0]));
 const voices = [...js.matchAll(/speak\("(\w+?)"(?: \+ \w+)?\)/g)].map((m) => m[1]);
+refs.add("assets/voice/silence.mp3");
 for (const lang of ["fr", "en"]) {
   for (const k of ["intro_0", "intro_1", "intro_2", "intro_3", "back_0", "twist_0", "twist_1", "twist_2", "twist_3", "twist_4"]) refs.add(`assets/voice/${lang}/${k}.mp3`);
 }

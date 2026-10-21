@@ -11,7 +11,9 @@ const SRC = { who: CHARS[0].src, parcours: CHARS[1].src, travail: CHARS[2].src, 
 const T = {
   fr: {
     skip: "passer ›", enter: "[ entrer ]", contact: "./exfiltrer",
-    gate: "Voir le portfolio ›", gateBack: "Reprendre ›", sndHint: "son conseillé", wipe: "connexion…",
+    gate: "Voir le portfolio ›", gateBack: "Voir le portfolio ›", sndHint: "🔊 avec le son, c'est mieux", wipe: "connexion…",
+    fkNav1: "Projets", fkNav2: "Parcours", fkNav3: "Contact", fkKicker: "Portfolio · 2026",
+    fkTitle: "Ingénieur logiciel, Bac+5. Applications web, données, cloud et IA en production.",
     scanHead: "connexion entrante détectée",
     scan: { ip: "ip publique", dev: "appareil", scr: "écran", tz: "fuseau", lang: "langue", net: "réseau", bat: "batterie", cpu: "processeur", th: "thème", city: "position", approx: "(approx.)", isp: "opérateur", hidden: "masquée (bien joué)", cores: "cœurs", dark: "sombre", light: "clair" },
     granted: "accès obtenu.",
@@ -23,35 +25,35 @@ const T = {
     ],
     introBack: ["Te revoilà{ip}.", "On reprend où on s'était arrêtés."],
     introNight: "Il est tard. Moi non plus, je ne dors pas.",
-    lead: "Ingénieur IA. Je construis des agents qui n'ont pas le droit de mentir.",
+    lead: "Ingénieur logiciel, Bac+5. Full-stack, data, cloud, et de l'IA qui tient en production.",
     down: "descends ↓", pick: "choisis ta cible",
     s1: "01_reconnaissance", s2: "02_dechiffrement", s3: "03_payload", s4: "04_ingenierie_sociale", s5: "05_exfiltration",
     v1: "Première règle : connaître sa cible. Ici, la cible, c'est moi. Passe le doigt sur ce qui est caviardé.",
     v2: "Ses diplômes sont chiffrés. Touche un fichier pour le déchiffrer.",
     v3: "Voilà ce qu'il fabrique. Ne me crois pas sur parole : lance-le toi-même.",
-    v4: "Tout le monde a des failles. Voici les siennes.",
+    v4: "Tout le monde a des failles. Les siennes en disent plus long que son CV.",
     v5: "Dernière étape. Tu repars avec ce qu'il te faut.",
     reveal: "tout révéler", weak: "points faibles", langs: "langues",
     exfil: "[ exfiltrer le contact ]", dont: "ne pas cliquer", copied: "copié :",
     me: "moi", him: "lui",
     dossier: [
       ["SUJET", "Ayoub Amrani"],
-      ["RÔLE", "ingénieur IA et développeur"],
-      ["STATUT", "disponible immédiatement : cherche un poste en IA générative"],
-      ["FORMATION", "Master 2 Informatique, parcours TNSID, INSA Hauts-de-France (2024 – 2026)"],
+      ["RÔLE", "ingénieur logiciel : full-stack, data, cloud, IA"],
+      ["STATUT", "disponible immédiatement : poste d'ingénieur logiciel, data ou IA"],
+      ["FORMATION", "Bac+5 : Master 2 Informatique, parcours TNSID, INSA Hauts-de-France (2024 – 2026)"],
       ["ANTÉCÉDENTS", "trois ans de médecine à Paris 7 · régulateur au SAMU 92"],
-      ["SPÉCIALITÉ", "agents et chaînes LLM en production : relances, contrôle de ce que produit le modèle, journal de chaque appel"],
+      ["TERRAIN", "applications web (React, Java Spring Boot), données (Python, SQL, Power BI), serveurs en production (Docker, Nginx, Linux), chaînes LLM fiables"],
       ["DERNIÈRE MISSION", "IDC Academy, 2026 : plateforme e-learning mise en production, plus de 1 000 leçons vidéo produites par une chaîne IA et vérifiées"],
       ["BASE", "Valenciennes (Nord)"],
       ["PREUVES", "chaque phrase de ce site vient d'un registre de faits vérifiés ; rien n'est inventé"],
     ],
-    duo1: [["d", "Dis-leur que t'as dix ans d'expérience."], ["a", "Non. Trois stages, et une plateforme en production."], ["d", "Ennuyeux."], ["a", "Vrai."]],
-    duo4: [["d", "Mets que tu parles japonais."], ["a", "Arabe, français, anglais C1. C'est tout."], ["d", "Personne ne vérifiera."], ["a", "Moi, si."]],
+    duo1: [["d", "Dis-leur que tu ne fais que de l'IA. Ça vend."], ["a", "Non. Une banque, un groupe industriel, une plateforme en production. L'IA en plus."], ["d", "Trop honnête."], ["a", "Vérifiable."]],
+    duo4: [["d", "Mets que tu parles japonais."], ["a", "Arabe, français, anglais C1."], ["d", "Personne ne vérifiera."], ["a", "Moi, si. C'est le principe."]],
     notes: [
-      ["Jeux vidéo", "aime les systèmes qui ont des règles. et trouver où elles cassent."],
-      ["Cuisine", "suit la recette une fois. ensuite, il la modifie."],
-      ["Voyage", "change de décor pour mieux réfléchir."],
-      ["Recherche", "lit l'article jusqu'aux annexes."],
+      ["Jeux vidéo", "les systèmes à règles, et l'endroit exact où elles cèdent."],
+      ["Cuisine", "la précision d'abord, l'improvisation ensuite."],
+      ["Voyage", "Maroc, France : il s'adapte vite à un nouvel environnement."],
+      ["Recherche", "lit la publication jusqu'aux annexes avant d'y croire."],
     ],
     langList: [["Arabe", "langue maternelle"], ["Français", "langue maternelle"], ["Anglais", "C1 · TOEIC"]],
     exsteps: ["connexion à ayoub@amrani", "contournement du pare-feu RH", "chiffrement du canal", "copie de l'adresse dans ton presse-papier"],
@@ -83,7 +85,9 @@ const T = {
   },
   en: {
     skip: "skip ›", enter: "[ enter ]", contact: "./exfiltrate",
-    gate: "View portfolio ›", gateBack: "Resume ›", sndHint: "sound on recommended", wipe: "connecting…",
+    gate: "View portfolio ›", gateBack: "View portfolio ›", sndHint: "🔊 better with sound on", wipe: "connecting…",
+    fkNav1: "Projects", fkNav2: "Background", fkNav3: "Contact", fkKicker: "Portfolio · 2026",
+    fkTitle: "Software engineer, Master's degree. Web apps, data, cloud and AI in production.",
     scanHead: "incoming connection detected",
     scan: { ip: "public ip", dev: "device", scr: "screen", tz: "timezone", lang: "language", net: "network", bat: "battery", cpu: "cpu", th: "theme", city: "location", approx: "(approx.)", isp: "provider", hidden: "hidden (well played)", cores: "cores", dark: "dark", light: "light" },
     granted: "access granted.",
@@ -95,35 +99,35 @@ const T = {
     ],
     introBack: ["You're back{ip}.", "Let's pick up where we left off."],
     introNight: "It's late. I don't sleep either.",
-    lead: "AI engineer. I build agents that aren't allowed to lie.",
+    lead: "Software engineer, Master's degree. Full-stack, data, cloud, and AI that holds up in production.",
     down: "scroll ↓", pick: "pick your target",
     s1: "01_recon", s2: "02_decrypt", s3: "03_payload", s4: "04_social_engineering", s5: "05_exfiltration",
     v1: "First rule: know your target. Here, the target is me. Run your finger over what's redacted.",
     v2: "His degrees are encrypted. Tap a file to decrypt it.",
     v3: "This is what he builds. Don't take my word for it: run it yourself.",
-    v4: "Everyone has weaknesses. Here are his.",
+    v4: "Everyone has weaknesses. His say more than his CV.",
     v5: "Last step. You leave with what you need.",
     reveal: "reveal all", weak: "weaknesses", langs: "languages",
     exfil: "[ exfiltrate contact ]", dont: "do not click", copied: "copied:",
     me: "me", him: "him",
     dossier: [
       ["SUBJECT", "Ayoub Amrani"],
-      ["ROLE", "AI engineer and developer"],
-      ["STATUS", "available now: looking for a generative AI role"],
+      ["ROLE", "software engineer: full-stack, data, cloud, AI"],
+      ["STATUS", "available now: software, data or AI engineering role"],
       ["EDUCATION", "Master's in Computer Science, TNSID track, INSA Hauts-de-France (2024 – 2026)"],
       ["BACKGROUND", "three years of medical school in Paris · emergency dispatcher at SAMU 92"],
-      ["SPECIALTY", "agents and LLM pipelines in production: retries, checks on what the model produces, a log of every call"],
+      ["FIELD", "web apps (React, Java Spring Boot), data (Python, SQL, Power BI), production servers (Docker, Nginx, Linux), reliable LLM pipelines"],
       ["LAST MISSION", "IDC Academy, 2026: e-learning platform put into production, more than 1,000 video lessons produced by an AI pipeline and checked"],
       ["BASE", "Valenciennes, France"],
       ["EVIDENCE", "every sentence on this site comes from a register of checked facts; nothing is made up"],
     ],
-    duo1: [["d", "Tell them you have ten years of experience."], ["a", "No. Three internships, and a platform in production."], ["d", "Boring."], ["a", "True."]],
-    duo4: [["d", "Say you speak Japanese."], ["a", "Arabic, French, English C1. That's it."], ["d", "Nobody will check."], ["a", "I will."]],
+    duo1: [["d", "Tell them you only do AI. It sells."], ["a", "No. A bank, an industrial group, a platform in production. AI on top."], ["d", "Too honest."], ["a", "Verifiable."]],
+    duo4: [["d", "Say you speak Japanese."], ["a", "Arabic, French, English C1."], ["d", "Nobody will check."], ["a", "I will. That's the point."]],
     notes: [
-      ["Video games", "likes systems with rules. and finding where they break."],
-      ["Cooking", "follows the recipe once. then he changes it."],
-      ["Travel", "changes the scenery to think better."],
-      ["Research", "reads the paper down to the appendix."],
+      ["Video games", "systems with rules, and the exact spot where they give way."],
+      ["Cooking", "precision first, improvisation second."],
+      ["Travel", "Morocco, France: adapts fast to a new environment."],
+      ["Research", "reads the paper down to the appendix before believing it."],
     ],
     langList: [["Arabic", "native"], ["French", "native"], ["English", "C1 · TOEIC"]],
     exsteps: ["connecting to ayoub@amrani", "bypassing the HR firewall", "encrypting the channel", "copying the address to your clipboard"],
@@ -214,14 +218,19 @@ function fig(src, alt, noMotion) {
 function glitch(el) { if (!el || still) return; el.dataset.text = el.textContent; el.classList.remove("go"); void el.offsetWidth; el.classList.add("go"); }
 
 /* ============ voix ============ */
-// Un seul élément audio, débloqué par le clic du visiteur (iOS refuse le son sans geste), puis réutilisé.
-const voiceEl = new Audio(); voiceEl.preload = "auto";
-let soundOn = store.get("sound") !== "off";
+// Un seul élément audio, réutilisé pour toutes les répliques. Safari (iPhone) n'autorise le son
+// que si un geste du visiteur lance une vraie lecture NON muette : au premier toucher, on joue un
+// court silence sur cet élément, qui reste ensuite autorisé pour toute la visite.
+const voiceEl = new Audio(); voiceEl.preload = "auto"; voiceEl.setAttribute("playsinline", "");
+let soundOn = store.get("sound") !== "off", voiceUnlocked = false;
 function unlockVoice() {
-  if (!soundOn) return;
-  voiceEl.muted = true; voiceEl.src = `assets/voice/${L}/intro_0.mp3`;
-  const pr = voiceEl.play(); if (pr) pr.then(() => { voiceEl.pause(); voiceEl.muted = false; }).catch(() => {});
+  if (voiceUnlocked || !soundOn) return;
+  voiceEl.muted = false; voiceEl.src = "assets/voice/silence.mp3";
+  const pr = voiceEl.play();
+  if (pr) pr.then(() => { voiceUnlocked = true; }).catch(() => {}); else voiceUnlocked = true;
 }
+// tout premier toucher, n'importe où (bouton « passer », exfiltration…), débloque aussi le son
+["pointerdown", "touchend", "keydown"].forEach((ev) => addEventListener(ev, unlockVoice, { capture: true, passive: true }));
 function speak(key) {
   return new Promise((res) => {
     if (!soundOn || still) return res();
@@ -232,7 +241,7 @@ function speak(key) {
   });
 }
 function renderSnd() { const b = $("#snd"); b.textContent = soundOn ? "♪ on" : "♪ off"; b.classList.toggle("on", soundOn); }
-$("#snd").onclick = () => { soundOn = !soundOn; store.set("sound", soundOn ? "on" : "off"); if (!soundOn) voiceEl.pause(); renderSnd(); };
+$("#snd").onclick = () => { soundOn = !soundOn; store.set("sound", soundOn ? "on" : "off"); if (!soundOn) voiceEl.pause(); else unlockVoice(); renderSnd(); };
 renderSnd();
 
 /* ============ intro : l'écran piraté ============ */

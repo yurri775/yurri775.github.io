@@ -28,8 +28,6 @@ a { color: inherit; }
 .fake-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #15171b; }
 .fake-body b { font-size: clamp(30px, 6vw, 56px); letter-spacing: -.03em; }
 .fake-body span { color: #6a6f76; }
-.fake-body em { display: block; width: min(420px, 70vw); height: 12px; border-radius: 6px; background: #e3e3df; }
-.fake-body em.s { width: min(260px, 50vw); }
 .fake.tear { animation: tear .55s steps(6) forwards; }
 @keyframes tear {
   0% { clip-path: inset(0 0 0 0); transform: none; filter: none; }
@@ -331,3 +329,52 @@ body.shake main { animation: shake .45s steps(5) 1; }
 
 /* avatar animé : la vidéo a été générée sur le fond exact du site (#0b0b0c), elle s’y fond sans fusion */
 .fig.anim video { height: 100%; width: auto; display: block; }
+
+/* faux portfolio d'entrée : propre et crédible, pour que la « prise de contrôle » surprenne vraiment */
+.fake { background: #f7f7f5; }
+.fake-bar { display: none; }
+.fake-nav { display: flex; align-items: center; gap: 22px; padding: max(18px, env(safe-area-inset-top)) 24px 18px; font: 600 14px var(--sans); color: #6a6f76; border-bottom: 1px solid #ebeae6; }
+.fake-nav b { color: #15171b; margin-right: auto; letter-spacing: .04em; }
+.fake-body { gap: 0; padding: 24px; }
+.fake-ph { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; box-shadow: 0 6px 24px rgba(0, 0, 0, .12); margin-bottom: 22px; }
+.fake-k { margin: 0 0 10px; font: 800 12px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: #1e3a5f; }
+.fake-h { margin: 0; font: 700 clamp(38px, 8vw, 64px)/1.02 var(--sans); letter-spacing: -.035em; color: #15171b; }
+.fake-t { margin: 14px 0 22px; max-width: 34ch; text-align: center; font: 400 17px/1.55 var(--sans); color: #4a4f57; }
+.fake-s { list-style: none; padding: 0; margin: 0 0 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 460px; }
+.fake-s li { font: 600 12px var(--sans); color: #33373d; background: #fff; border: 1px solid #e6e5e1; border-radius: 999px; padding: 6px 12px; }
+@media (max-width: 520px) { .fake-nav span { display: none; } }
+
+/* téléphone : tout un cran plus petit (« zoom moins ») */
+@media (max-width: 520px) {
+  .head h1 { font-size: 38px; }
+  .lead { font-size: 15px; }
+  .st { padding-top: 84px; }
+  .st-h h2 { font-size: 26px; }
+  .st-h .no { font-size: 12px; }
+  .voice { font-size: 13px; margin: 12px 0 26px; }
+  .dossier { padding: 16px; }
+  .cam { width: 112px; }
+  .dossier dl { font-size: 14px; }
+  .dossier dt { font-size: 10.5px; }
+  .duo { font-size: 12.5px; }
+  .file { min-height: 0; padding: 14px; }
+  .file h3 { font-size: 15px; margin: 10px 0 6px; }
+  .file p { font-size: 13px; }
+  .out { font-size: 12px; }
+  .in label { font-size: 12px; }
+  .chips button { font-size: 11px; padding: 5px 8px; }
+  .notes b { font-size: 15px; }
+  .notes span, .langs span { font-size: 12px; }
+  .langs li { font-size: 15px; }
+  .exfil { font-size: 15px; padding: 14px 20px; }
+  .exlog { font-size: 12.5px; }
+  .twist-txt { font-size: 14.5px; }
+  .links a, .links button { font-size: 13px; padding: 10px 14px; }
+  .char > span { font-size: 12.5px; padding: 8px 12px; }
+  .term { font-size: 15px; }
+  .fake-ph { width: 80px; height: 80px; margin-bottom: 18px; }
+  .fake-h { font-size: 34px; }
+  .fake-t { font-size: 15px; margin: 12px 0 18px; }
+  .fake-s li { font-size: 11px; padding: 5px 10px; }
+  .gate { font-size: 15px; padding: 12px 22px; margin-top: 20px; }
+}
