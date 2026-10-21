@@ -196,8 +196,17 @@ const t = (k) => T[L][k], p = (a) => (Array.isArray(a) ? a[L === "fr" ? 0 : 1] :
 const night = new Date().getHours() < 5;
 if (night) document.body.classList.add("night");
 const SIL = `<svg viewBox="0 0 120 300" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ececea" stop-opacity=".35"/><stop offset="1" stop-color="#ececea" stop-opacity=".04"/></linearGradient></defs><circle cx="60" cy="38" r="24" fill="url(#sg)"/><path d="M28 78q32-14 64 0l8 92h-16l-4 124H46l-4-124H20z" fill="url(#sg)"/></svg>`;
-function fig(src, alt) {
+// Avatars animés (vidéo MiniMax sur fond noir, fondue dans la page) : l'image reste en secours.
+const MOTION = { "assets/chars/who.webp": "assets/chars/who.mp4" };
+function fig(src, alt, noMotion) {
   const d = document.createElement("div"); d.className = "fig";
+  if (MOTION[src] && !still && !noMotion) {
+    const v = document.createElement("video");
+    Object.assign(v, { muted: true, loop: true, autoplay: true, playsInline: true, preload: "auto", poster: src });
+    v.setAttribute("aria-label", alt); v.src = MOTION[src];
+    v.onerror = () => { const im = new Image(); im.alt = alt; im.src = src; v.replaceWith(im); };
+    d.classList.add("anim"); d.appendChild(v); return d;
+  }
   const im = new Image(); im.alt = alt; im.decoding = "async";
   im.onerror = () => { d.innerHTML = `<div class="ph">${SIL}</div>`; };
   im.src = src; d.appendChild(im); return d;
@@ -596,7 +605,8 @@ function setLang(l) {
   if (!$("#twist").hidden) { renderTwist(); $$("#twistTxt p").forEach((el) => el.classList.add("on")); }
   if (current === "s1" || current === "s4") enter(current);
 }
-$$("[data-char]").forEach((el) => el.appendChild(fig(SRC[el.dataset.char], "Ayoub")));
+// le double reste une image : ses ombres rouge et cyan suivent la silhouette détourée, pas le cadre d'une vidéo
+$$("[data-char]").forEach((el) => el.appendChild(fig(SRC[el.dataset.char], "Ayoub", el.classList.contains("double"))));
 setLang(L);
 show(location.hash.slice(1));
 intro();

@@ -40,8 +40,9 @@ test("le carrousel montre les 4 avatars, chargés", async ({ page }) => {
   await skip(page);
   await page.mouse.wheel(0, 1200);
   await expect(page.locator(".char")).toHaveCount(4);
-  const loaded = await page.$$eval(".char img", (ims) => ims.map((i) => i.complete && i.naturalWidth > 300));
-  expect(loaded).toEqual([true, true, true, true]);
+  // image chargée, ou vidéo animée dont la première image est prête
+  await expect.poll(() => page.$$eval(".char .fig > img, .char .fig > video", (els) =>
+    els.map((e) => (e.tagName === "VIDEO" ? e.readyState >= 2 : e.complete && e.naturalWidth > 300))), { timeout: 10000 }).toEqual([true, true, true, true]);
   expect(await overflow(page)).toBeLessThanOrEqual(0);
   expect(errors).toEqual([]);
 });

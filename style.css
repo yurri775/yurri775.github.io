@@ -328,3 +328,6 @@ body.shake main { animation: shake .45s steps(5) 1; }
   .snd, .sw button, .contact, .back { padding: 6px 7px; font-size: 11px; }
   .snd { white-space: nowrap; }
 }
+
+/* avatar animé : la vidéo a été générée sur le fond exact du site (#0b0b0c), elle s’y fond sans fusion */
+.fig.anim video { height: 100%; width: auto; display: block; }
