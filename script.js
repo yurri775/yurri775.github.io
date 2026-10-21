@@ -1,10 +1,10 @@
 /* ============ CONTENU ============ */
 // Uniquement des faits vérifiés (registre faits_verifies.json). Les quatre avatars : une tenue par étape.
 const CHARS = [
-  { page: "s1", k: "s1", src: "assets/chars/who.webp" },
-  { page: "s2", k: "s2", src: "assets/chars/parcours.webp" },
-  { page: "s3", k: "s3", src: "assets/chars/travail.webp" },
-  { page: "s4", k: "s4", src: "assets/chars/passions.webp" },
+  { page: "s1", k: "s1", src: "assets/ink/who.webp" },
+  { page: "s2", k: "s2", src: "assets/ink/parcours.webp" },
+  { page: "s3", k: "s3", src: "assets/ink/travail.webp" },
+  { page: "s4", k: "s4", src: "assets/ink/passions.webp" },
 ];
 const SRC = { who: CHARS[0].src, parcours: CHARS[1].src, travail: CHARS[2].src, passions: CHARS[3].src };
 
@@ -201,7 +201,7 @@ const night = new Date().getHours() < 5;
 if (night) document.body.classList.add("night");
 const SIL = `<svg viewBox="0 0 120 300" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ececea" stop-opacity=".35"/><stop offset="1" stop-color="#ececea" stop-opacity=".04"/></linearGradient></defs><circle cx="60" cy="38" r="24" fill="url(#sg)"/><path d="M28 78q32-14 64 0l8 92h-16l-4 124H46l-4-124H20z" fill="url(#sg)"/></svg>`;
 // Avatars animés (vidéo MiniMax sur fond noir, fondue dans la page) : l'image reste en secours.
-const MOTION = { "assets/chars/who.webp": "assets/chars/who.mp4" };
+const MOTION = {}; // la vidéo animée était en couleurs : retirée du monde à l’encre
 function fig(src, alt, noMotion) {
   const d = document.createElement("div"); d.className = "fig";
   if (MOTION[src] && !still && !noMotion) {
@@ -260,8 +260,8 @@ async function getJSON(url, ms) {
   const r = await fetch(url, { signal: c.signal, cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.json();
 }
 const geoP = (async () => {
-  try { const g = await getJSON("https://ipapi.co/json/", 2200); if (g && g.ip && !g.error) return g; } catch (e) {}
-  try { const g = await getJSON("https://api.ipify.org?format=json", 1500); return { ip: g.ip }; } catch (e) { return {}; }
+  try { const g = await getJSON("https://ipapi.co/json/", 5000); if (g && g.ip && !g.error) return g; } catch (e) {}
+  try { const g = await getJSON("https://api.ipify.org?format=json", 3000); return { ip: g.ip }; } catch (e) { return {}; }
 })();
 const ipP = geoP.then((g) => g.ip || null);
 async function battery() {
@@ -338,12 +338,12 @@ function endIntro() {
   if (introDone) return; introDone = true; store.set("seen", "1"); voiceEl.pause();
   $("#intro").classList.add("out"); document.body.classList.remove("locked");
   setTimeout(() => $("#intro") && $("#intro").remove(), 700);
-  glitch($("#home h1"));
+  glitch($("#home h1")); if (window.world && window.world.start) world.start();
 }
 $("#enter").onclick = endIntro; $("#skip").onclick = endIntro;
 
 /* ============ navigation ============ */
-const views = ["home", "s1", "s2", "s3", "s4"];
+const views = ["home", "s1", "s2", "s3", "s4", "s5"];
 let current = "home", homeY = 0;
 function show(name) {
   if (!views.includes(name)) name = "home";
@@ -354,7 +354,7 @@ function show(name) {
   scrollTo(0, name === "home" ? homeY : 0);
   document.documentElement.style.scrollBehavior = "";
   if (name !== "home") { glitch($(`#${name} h2`)); enter(name); }
-  onScroll();
+  if (window.world && window.world.start) world.onView(name);
 }
 let wiping = false;
 async function go(n) {
@@ -365,39 +365,11 @@ async function go(n) {
 }
 addEventListener("hashchange", () => show(location.hash.slice(1)));
 $("#back").onclick = () => go("home");
-$("#contact").onclick = () => {
-  const down = () => $("#footer").scrollIntoView({ behavior: "smooth" });
-  if (current === "home") down(); else { location.hash = "home"; setTimeout(down, 250); }
-};
+$("#contact").onclick = () => go("s5");
 $$(".sw button").forEach((b) => (b.onclick = () => setLang(b.dataset.l)));
 
-/* ============ accueil : carrousel des 4 avatars ============ */
-let act = 0; const n = CHARS.length, half = Math.floor(n / 2);
-function renderChars() {
-  const box = $("#chars"); box.innerHTML = "";
-  CHARS.forEach((c, i) => {
-    const b = document.createElement("button"); b.className = "char";
-    b.appendChild(fig(c.src, t(c.k))); b.insertAdjacentHTML("beforeend", `<span>${esc(t(c.k))}</span>`);
-    b.onclick = () => { if (i === act) go(c.page); else { act = i; layout(); } };
-    box.appendChild(b);
-  });
-  layout();
-}
-function layout() { $$(".char").forEach((el, i) => { const o = ((i - act + n + half) % n) - half; el.style.setProperty("--o", o); el.style.setProperty("--s", o === 0 ? 1 : 0.62); el.dataset.o = o; }); }
-$("#prev").onclick = () => { act = (act - 1 + n) % n; layout(); };
-$("#next").onclick = () => { act = (act + 1) % n; layout(); };
-let sx = null;
-$("#stage").addEventListener("touchstart", (e) => (sx = e.touches[0].clientX), { passive: true });
-$("#stage").addEventListener("touchend", (e) => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) (dx < 0 ? $("#next") : $("#prev")).click(); sx = null; });
-function onScroll() {
-  if (current !== "home") return;
-  const q = Math.min(1, Math.max(0, scrollY / (innerHeight * 0.7)));
-  $("#head").style.transform = `translateY(${-q * 30}vh) scale(${1 - 0.55 * q})`;
-  $("#head").style.opacity = String(Math.max(0, 1 - q * 1.6));
-  $("#hint").style.opacity = String(1 - q * 3);
-  const s = $("#stage"); s.style.opacity = q; s.style.transform = `translateY(${(1 - q) * 60}px)`; s.style.pointerEvents = q > 0.6 ? "auto" : "none";
-}
-addEventListener("scroll", onScroll, { passive: true });
+/* ============ accueil : le monde (world.js) ============ */
+// world.js anime la rue, le personnage et les bâtiments ; il expose window.world.
 
 /* ============ 01 · reconnaissance ============ */
 function renderDossier() {
@@ -565,7 +537,6 @@ async function exfil() {
 }
 function renderTwist() { $("#twistTxt").innerHTML = t("twist").map((s) => `<p>${esc(s)}</p>`).join("") + `<p class="sig">${esc(t("sig"))}</p>`; }
 $("#exfil").onclick = exfil;
-new IntersectionObserver((e) => { if (e[0].isIntersecting) glitch($("#footer h2")); }, { threshold: 0.4 }).observe($("#footer"));
 
 /* « ne pas cliquer » */
 $("#dont").onclick = async () => {
@@ -579,8 +550,6 @@ let buf = "";
 addEventListener("keydown", (e) => {
   if (!introDone) { if (e.key === "Escape" || (e.key === "Enter" && !$("#enter").hidden)) endIntro(); return; }
   if (e.target.tagName === "INPUT") return;
-  if (current === "home" && e.key === "ArrowLeft") $("#prev").click();
-  if (current === "home" && e.key === "ArrowRight") $("#next").click();
   if (e.key.length === 1) { buf = (buf + e.key.toLowerCase()).slice(-4); if (buf === "help") { go("s3"); setTimeout(() => run("help"), 400); } }
 });
 
@@ -610,7 +579,7 @@ function setLang(l) {
   document.documentElement.lang = l;
   $$("[data-i]").forEach((e) => { const v = t(e.dataset.i); if (typeof v === "string") { e.textContent = v; if (e.hasAttribute("data-gl")) e.dataset.text = v; } });
   $$(".sw button").forEach((b) => b.classList.toggle("on", b.dataset.l === l));
-  renderChars(); renderDossier(); renderFiles(); renderTerm(); renderProfile();
+  if (window.world && window.world.start) world.relabel(); renderDossier(); renderFiles(); renderTerm(); renderProfile();
   if (!$("#twist").hidden) { renderTwist(); $$("#twistTxt p").forEach((el) => el.classList.add("on")); }
   if (current === "s1" || current === "s4") enter(current);
 }

@@ -3,13 +3,21 @@ const { test, expect } = require("@playwright/test");
 const AxeBuilder = require("@axe-core/playwright").default;
 const path = require("path");
 
-const URL = "file://" + path.join(__dirname, "..", "dist", "index.html");
+const URL = "/index.html";
 const GEO = { ip: "203.0.113.42", city: "Lille", country_name: "France", org: "Exemple Télécom" };
 
 test.beforeEach(async ({ page }) => {
-  // la géolocalisation par IP est simulée : le test ne dépend pas du réseau
-  await page.route("https://ipapi.co/**", (r) => r.fulfill({ json: GEO }));
-  await page.route("https://api.ipify.org/**", (r) => r.fulfill({ json: { ip: GEO.ip } }));
+  // la géolocalisation par IP est simulée dans la page même : le test ne dépend ni du réseau ni de la charge
+  // de la machine (une interception côté Playwright met parfois plusieurs secondes à répondre)
+  await page.addInitScript((geo) => {
+    const real = window.fetch;
+    window.fetch = (url, opt) => {
+      const u = String(url);
+      if (u.includes("ipapi.co")) return Promise.resolve(new Response(JSON.stringify(geo)));
+      if (u.includes("ipify.org")) return Promise.resolve(new Response(JSON.stringify({ ip: geo.ip })));
+      return real(url, opt);
+    };
+  }, GEO);
 });
 
 async function open(page, hash = "") {
@@ -26,8 +34,8 @@ test("l'intro piratée affiche le scan puis la voix", async ({ page }) => {
   await expect(page.locator("#gate")).toBeVisible();
   await page.locator("#gate").click();
   await expect(page.locator(".scan-row").first()).toContainText(GEO.ip, { timeout: 8000 });
-  await expect(page.locator("#introTerm")).toContainText("Lille, France");
-  await expect(page.locator("#introTerm")).toContainText("Exemple Télécom");
+  await expect(page.locator("#introTerm")).toContainText("Lille, France", { timeout: 15000 });
+  await expect(page.locator("#introTerm")).toContainText("Exemple Télécom", { timeout: 15000 });
   await expect(page.locator(".granted")).toBeVisible({ timeout: 15000 });
   await expect(page.locator("#enter")).toBeVisible({ timeout: 40000 });
   await page.locator("#enter").click();
@@ -35,31 +43,42 @@ test("l'intro piratée affiche le scan puis la voix", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test("le carrousel montre les 4 avatars, chargés", async ({ page }) => {
+test("le monde 3D se charge : rue, 5 lieux, personnage", async ({ page }) => {
   const errors = await open(page);
   await skip(page);
-  await page.mouse.wheel(0, 1200);
-  await expect(page.locator(".char")).toHaveCount(4);
-  // image chargée, ou vidéo animée dont la première image est prête
-  await expect.poll(() => page.$$eval(".char .fig > img, .char .fig > video", (els) =>
-    els.map((e) => (e.tagName === "VIDEO" ? e.readyState >= 2 : e.complete && e.naturalWidth > 300))), { timeout: 10000 }).toEqual([true, true, true, true]);
+  await expect(page.locator("canvas.gl3d")).toBeVisible();
+  await expect(page.locator("#map li")).toHaveCount(5);
+  await expect.poll(() => page.evaluate(() => window.world && window.world.places.length)).toBe(5);
   expect(await overflow(page)).toBeLessThanOrEqual(0);
   expect(errors).toEqual([]);
 });
 
-test("chaque étape s'ouvre depuis le carrousel, sans débordement", async ({ page }) => {
+test("on marche jusqu'à chaque lieu, la tenue change, on entre", async ({ page }) => {
   const errors = await open(page);
   await skip(page);
-  await page.mouse.wheel(0, 1200);
-  for (const [id, title] of [["s1", "01_reconnaissance"], ["s2", "02_dechiffrement"], ["s3", "03_payload"], ["s4", "04_ingenierie_sociale"]]) {
-    await page.locator(".char[data-o='0']").click();
+  const pages = [["s1", "01_reconnaissance", "who"], ["s2", "02_dechiffrement", "parcours"], ["s3", "03_payload", "travail"], ["s4", "04_ingenierie_sociale", "passions"], ["s5", "05_exfiltration", "who"]];
+  for (let i = 0; i < pages.length; i++) {
+    const [id, title, outfit] = pages[i];
+    await page.evaluate((k) => window.world.teleport(k), i);
+    await expect.poll(() => page.evaluate(() => window.world.near)).toBe(i);
+    expect(await page.evaluate(() => window.world.outfit)).toBe(outfit);
+    await page.keyboard.press("Enter");
     await expect(page.locator(`#${id}`)).toBeVisible();
     await expect(page.locator(`#${id} h2`)).toHaveText(title);
     expect(await overflow(page)).toBeLessThanOrEqual(0);
     await page.locator("#back").click();
-    await page.locator("#next").click();
+    await expect(page.locator("#home")).toBeVisible();
   }
+  await expect(page.locator("#questN")).toHaveText("5/5");
   expect(errors).toEqual([]);
+});
+
+test("le clavier fait marcher le personnage", async ({ page }) => {
+  await open(page);
+  await skip(page);
+  const z0 = await page.evaluate(() => window.world.z);
+  await page.keyboard.down("ArrowUp"); await page.waitForTimeout(800); await page.keyboard.up("ArrowUp");
+  expect(await page.evaluate(() => window.world.z)).toBeLessThan(z0 - 2);
 });
 
 test("le dossier se révèle et les diplômes se déchiffrent", async ({ page }) => {
@@ -88,9 +107,8 @@ test("le terminal exécute les commandes", async ({ page }) => {
 
 test("l'exfiltration donne le contact puis la révélation", async ({ page, context, browserName }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await open(page);
+  await open(page, "#s5");
   await skip(page);
-  await page.locator("#footer").scrollIntoViewIfNeeded();
   await page.locator("#exfil").click();
   await expect(page.locator("#links")).toBeVisible({ timeout: 10000 });
   await expect(page.locator("#twist")).toBeVisible({ timeout: 10000 });

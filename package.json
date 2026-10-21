@@ -1,13 +1,20 @@
 {
   "name": "ayoub-portfolio",
   "private": true,
-  "description": "eps1.0_ayoub.exe : portfolio d'Ayoub Amrani, ingénieur IA",
+  "description": "eps1.0_ayoub.exe : portfolio d'Ayoub Amrani, ingénieur logiciel",
   "scripts": {
-    "build": "node scripts/build.js",
+    "bundle": "esbuild src/world.js --bundle --minify --format=iife --target=es2019 --legal-comments=eof --outfile=world3d.js",
+    "build": "npm run bundle && node scripts/build.js",
     "test": "npm run build && playwright test"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.0",
     "@playwright/test": "1.47.2"
+  },
+  "dependencies": {
+    "esbuild": "0.21.5",
+    "gsap": "3.12.5",
+    "howler": "2.2.4",
+    "three": "^0.160.0"
   }
 }

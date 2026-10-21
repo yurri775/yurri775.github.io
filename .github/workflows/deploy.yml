@@ -31,7 +31,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ hashFiles('package-lock.json') }}
       - run: npx playwright install --with-deps chromium
-      # build : empreinte des fichiers, ressources vérifiées, budget de 3 Mo ; puis 16 tests iPhone + ordinateur
+      # build : monde 3D regroupé (esbuild), empreinte des fichiers, ressources vérifiées, budget de 12 Mo ; puis 18 tests iPhone + ordinateur
       - run: npm test
       - name: Rapport de tests
         if: failure()
