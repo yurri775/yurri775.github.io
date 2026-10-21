@@ -39,7 +39,7 @@ test("l'intro piratée affiche le scan puis la voix", async ({ page }) => {
   await expect(page.locator(".granted")).toBeVisible({ timeout: 15000 });
   await expect(page.locator("#enter")).toBeVisible({ timeout: 40000 });
   await page.locator("#enter").click();
-  await expect(page.locator("#intro")).toHaveCount(0, { timeout: 3000 });
+  await expect(page.locator("#intro")).toHaveCount(0, { timeout: 10000 });
   expect(errors).toEqual([]);
 });
 

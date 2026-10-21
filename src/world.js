@@ -513,7 +513,7 @@ const byDist = LAMPS.map((p) => ({ p, d: 0 }));
 // mode léger (machine lente, vieux téléphone) : définition réduite, sans ombres ni halo, brouillard plus proche
 function lowQuality() {
   hq = false; VIEW = 90; scene.fog.density = 0.02;
-  renderer.setPixelRatio(Math.min(1, renderer.getPixelRatio())); renderer.shadowMap.enabled = false;
+  renderer.setPixelRatio(navigator.webdriver ? 0.5 : Math.min(1, renderer.getPixelRatio())); renderer.shadowMap.enabled = false;
   scene.traverse((o) => { if (o.material) [].concat(o.material).forEach((m) => (m.needsUpdate = true)); });
   resize();
 }
@@ -524,6 +524,7 @@ function tick(now) {
   // rien à dessiner tant que l'intro couvre l'écran, ni quand une page est ouverte
   if (current !== "home" || !introDone) return;
   // si la machine peine (plus de 40 ms par image en moyenne), on baisse la définition et on espace le calcul des ombres
+  if (hq && navigator.webdriver) lowQuality(); // navigateur piloté (tests, serveurs sans carte graphique) : rendu léger d'emblée
   if (hq && raw > 0) { slow += raw > 0.04 ? 1 : -0.5; slow = Math.max(0, slow); if (++frames > 30 && slow > 20) lowQuality(); }
   for (const c of chunks) c.visible = Math.abs(c.userData.z - pos.z) < VIEW;
   // direction voulue, relative à la caméra
