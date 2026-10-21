@@ -271,7 +271,7 @@ async function typeLine(box, text, cls) {
   const row = document.createElement("div"); if (cls) row.className = cls;
   row.innerHTML = '<span class="r">&gt;</span> '; box.appendChild(row);
   const span = document.createElement("span"); row.appendChild(span);
-  for (const ch of text) { if (introDone) return; span.textContent += ch; await sleep(22); }
+  for (const ch of text) { if (introDone) return; span.textContent += ch; await sleep(32); }
 }
 async function intro() {
   const box = $("#introTerm"), seen = store.get("seen");
