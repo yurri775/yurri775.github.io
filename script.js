@@ -685,4 +685,9 @@ function setLang(l) {
 $$("[data-char]").forEach((el) => el.appendChild(fig(SRC[el.dataset.char], "Ayoub", el.classList.contains("double"))));
 setLang(L);
 show(location.hash.slice(1));
-intro();
+// entrée directe (QR code d'un salon, lien dans un CV) : ?qr saute l'intro et ouvre le dossier ; la 3D se charge derrière
+const QR = /[?&]qr\b/.test(location.search);
+function loadWorld() { const w = document.createElement("script"); w.src = document.querySelector('meta[name="world3d"]').content; document.body.appendChild(w); }
+if (QR) addEventListener("load", () => setTimeout(loadWorld, 1200)); else loadWorld();
+if (QR) { if (!location.hash) history.replaceState(null, "", location.pathname + location.search + "#s1"); endIntro(); show(location.hash.slice(1)); }
+else intro();

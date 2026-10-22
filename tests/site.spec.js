@@ -26,7 +26,8 @@ async function open(page, hash = "") {
   await page.goto(URL + hash);
   return errors;
 }
-const skip = (page) => page.locator("#skip").click();
+// le monde 3D est chargé après la page (script ajouté par script.js) : on attend qu'il soit prêt
+const skip = async (page) => { await page.locator("#skip").click(); await expect.poll(() => page.evaluate(() => !!(window.world && window.world.places)), { timeout: 30000 }).toBe(true); };
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
 
 test("l'intro piratée affiche le scan puis la voix", async ({ page }) => {
