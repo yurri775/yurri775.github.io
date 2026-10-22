@@ -696,6 +696,14 @@ setLang(L);
 show(location.hash.slice(1));
 // entrée directe (QR code d'un salon, lien dans un CV) : ?qr saute l'intro et ouvre le dossier ; la 3D se charge derrière
 const QR = /[?&]qr\b/.test(location.search);
+// compteur de visites (Abacus, sans compte ni cookie) : vues, visiteurs uniques (une fois par navigateur), arrivées par QR code
+(function compte() {
+  if (navigator.webdriver || /^(localhost|127\.)/.test(location.hostname)) return;
+  const hit = (k) => fetch("https://abacus.jasoncameron.dev/hit/yurri775-portfolio/" + k).catch(() => {});
+  hit("vues");
+  if (!store.get("vu")) { store.set("vu", "1"); hit("visiteurs"); }
+  if (QR) { const src = (new URLSearchParams(location.search).get("qr") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 30); hit("qr" + (src ? "-" + src : "")); }
+})();
 function loadWorld() { const w = document.createElement("script"); w.src = document.querySelector('meta[name="world3d"]').content; document.body.appendChild(w); }
 if (QR) addEventListener("load", () => setTimeout(loadWorld, 1200)); else loadWorld();
 if (QR) { if (!location.hash) history.replaceState(null, "", location.pathname + location.search + "#s1"); endIntro(); show(location.hash.slice(1)); }

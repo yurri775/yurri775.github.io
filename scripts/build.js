@@ -21,6 +21,7 @@ for (const f of ["style.css", "script.js", "world3d.js"]) {
 fs.writeFileSync(path.join(dist, "index.html"), html);
 fs.cpSync(path.join(root, "assets"), path.join(dist, "assets"), { recursive: true });
 fs.writeFileSync(path.join(dist, ".nojekyll"), "");
+fs.copyFileSync(path.join(root, "stats.html"), path.join(dist, "stats.html")); // compteur de visites, pour Ayoub
 
 // Toutes les ressources citées dans le HTML et le JS doivent exister.
 const js = fs.readFileSync(path.join(root, "script.js"), "utf8") + fs.readFileSync(path.join(root, "world3d.js"), "utf8");

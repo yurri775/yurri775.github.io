@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Statistiques du portfolio</title>
+<style>
+body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #0b0b0c; color: #ece9e2; padding: 28px 18px; }
+h1 { font: 700 22px/1.2 ui-monospace, Menlo, monospace; margin: 0 0 6px; }
+p { color: #9a9790; margin: 0 0 22px; font-size: 14px; }
+.n { display: grid; gap: 12px; }
+.c { background: #16171b; border: 1px solid #2c2f37; border-radius: 12px; padding: 16px; }
+.c b { display: block; font: 700 40px/1 ui-monospace, Menlo, monospace; color: #fff; }
+.c span { color: #9a9790; font-size: 14px; }
+.c.r b { color: #ff5a5a; }
+button { margin-top: 18px; width: 100%; padding: 14px; font-size: 16px; border-radius: 10px; border: 0; background: #ece9e2; color: #0b0b0c; }
+</style></head><body>
+<h1>Ton portfolio</h1><p>Compté depuis le 22/10/2026 · yurri775.github.io</p>
+<div class="n">
+  <div class="c"><b id="visiteurs">…</b><span>visiteurs uniques (un par navigateur)</span></div>
+  <div class="c"><b id="vues">…</b><span>vues au total</span></div>
+  <div class="c r"><b id="qr">…</b><span>arrivées par ton QR code</span></div>
+</div>
+<button onclick="charge()">Actualiser</button>
+<script>
+function charge() {
+  for (const k of ["visiteurs", "vues", "qr"])
+    fetch("https://abacus.jasoncameron.dev/get/yurri775-portfolio/" + k).then((r) => r.json()).then((d) => (document.getElementById(k).textContent = d.value ?? 0)).catch(() => (document.getElementById(k).textContent = "0"));
+}
+charge();
+</script></body></html>
