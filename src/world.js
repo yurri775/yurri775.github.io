@@ -62,6 +62,8 @@ renderer.setClearColor(NIGHT);
 renderer.toneMapping = T3.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = T3.PCFSoftShadowMap;
 W.prepend(renderer.domElement); renderer.domElement.className = "gl3d";
+// si le navigateur perd la 3D (mémoire du téléphone), on garde une image de la rue derrière les boutons d'accès direct
+renderer.domElement.addEventListener("webglcontextlost", (e) => { e.preventDefault(); W.classList.add("no3d"); });
 const scene = new T3.Scene();
 scene.background = new T3.Color(NIGHT);
 scene.fog = new T3.FogExp2(HAZE, 0.011);
@@ -590,7 +592,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 const byDist = LAMPS.map((p) => ({ p, d: 0 }));
 // mode léger (machine lente, vieux téléphone) : définition réduite, sans ombres ni halo, brouillard plus proche
 function lowQuality() {
-  hq = false; VIEW = 90; scene.fog.density = 0.02;
+  hq = false; bloom.enabled = false; VIEW = 90; scene.fog.density = 0.02;
   renderer.setPixelRatio(navigator.webdriver ? 0.5 : Math.min(1, renderer.getPixelRatio())); renderer.shadowMap.enabled = false;
   scene.traverse((o) => { if (o.material) [].concat(o.material).forEach((m) => (m.needsUpdate = true)); });
   resize();
@@ -602,7 +604,8 @@ function tick(now) {
   // rien à dessiner tant que l'intro couvre l'écran, ni quand une page est ouverte
   if (current !== "home" || !introDone) return;
   // si la machine peine (plus de 40 ms par image en moyenne), on baisse la définition et on espace le calcul des ombres
-  if (hq && navigator.webdriver) lowQuality(); // navigateur piloté (tests, serveurs sans carte graphique) : rendu léger d'emblée
+  // téléphone (Safari iOS rend noir le post-traitement en demi-flottants multi-échantillonnés) et navigateur piloté (tests) : rendu léger d'emblée
+  if (hq && (touch || navigator.webdriver)) lowQuality();
   if (hq && raw > 0) { slow += raw > 0.04 ? 1 : -0.5; slow = Math.max(0, slow); if (++frames > 30 && slow > 20) lowQuality(); }
   for (const c of chunks) c.visible = Math.abs(c.userData.z - pos.z) < VIEW;
   // direction voulue, relative à la caméra
