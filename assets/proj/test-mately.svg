@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<defs><marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#C8A24A"/></marker><marker id="arrow-back" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#A32B2B"/></marker></defs>
+<rect width="100%" height="100%" fill="#F6F5F0"/>
+<text x="60" y="100" font-size="44" font-weight="600" fill="#0E1B3A">test-mately : tâches partagées en temps réel</text>
+<rect x="180.0" y="150.0" width="1240.0" height="159.0" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="202.0" y="223.2" text-anchor="start" font-size="26" font-weight="600" fill="#0E1B3A">App mobile React Native (Expo)</text><text x="202.0" y="261.8" text-anchor="start" font-size="18" fill="#5A6274" opacity="0.85">Redux</text>
+<rect x="180.0" y="327.0" width="1240.0" height="159.0" rx="14" fill="#0E1B3A" stroke="#0E1B3A" stroke-width="2"/>
+<text x="202.0" y="400.2" text-anchor="start" font-size="26" font-weight="600" fill="#F6F5F0">Socket.io</text><text x="202.0" y="438.8" text-anchor="start" font-size="18" fill="#F6F5F0" opacity="0.85">mises à jour en direct</text>
+<rect x="180.0" y="504.0" width="1240.0" height="159.0" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="202.0" y="592.0" text-anchor="start" font-size="26" font-weight="600" fill="#0E1B3A">API Node.js + Express</text>
+<rect x="180.0" y="681.0" width="1240.0" height="159.0" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="202.0" y="769.0" text-anchor="start" font-size="26" font-weight="600" fill="#0E1B3A">MongoDB</text>
+</svg>

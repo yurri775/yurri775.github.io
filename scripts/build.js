@@ -24,7 +24,7 @@ fs.writeFileSync(path.join(dist, ".nojekyll"), "");
 
 // Toutes les ressources citées dans le HTML et le JS doivent exister.
 const js = fs.readFileSync(path.join(root, "script.js"), "utf8") + fs.readFileSync(path.join(root, "world3d.js"), "utf8");
-const refs = new Set([...(html + js).matchAll(/assets\/[\w./-]+\.(?:webp|png|jpg|mp3|glb|hdr|pdf)/g)].map((m) => m[0]));
+const refs = new Set([...(html + js).matchAll(/assets\/[\w./-]+\.(?:webp|png|jpg|mp3|glb|hdr|pdf|svg)/g)].map((m) => m[0]));
 const voices = [...js.matchAll(/speak\("(\w+?)"(?: \+ \w+)?\)/g)].map((m) => m[1]);
 refs.add("assets/voice/silence.mp3");
 for (const lang of ["fr", "en"]) {

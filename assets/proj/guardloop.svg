@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<defs><marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#C8A24A"/></marker><marker id="arrow-back" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#A32B2B"/></marker></defs>
+<rect width="100%" height="100%" fill="#F6F5F0"/>
+<text x="60" y="100" font-size="44" font-weight="600" fill="#0E1B3A">guardloop : le modèle au milieu, les garde-fous autour</text>
+<polyline points="248.3,455.0 318.3,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="506.7,455.0 576.7,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="765.0,455.0 835.0,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="1023.3,455.0 1093.3,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="1281.7,455.0 1351.7,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="929.2,547.6 929.2,617.6 670.8,617.6 670.8,547.6" fill="none" stroke="#A32B2B" stroke-width="3" marker-end="url(#arrow-back)"/>
+<text x="800.0" y="605.6" text-anchor="middle" font-size="18" font-style="italic" fill="#A32B2B">revalide</text>
+<rect x="60.0" y="362.4" width="188.3" height="185.2" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="154.2" y="425.3" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Prompt</text><text x="154.2" y="463.8" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">système</text><text x="154.2" y="487.2" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">stable, en</text><text x="154.2" y="510.6" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">cache</text>
+<rect x="318.3" y="362.4" width="188.3" height="185.2" rx="14" fill="#0E1B3A" stroke="#0E1B3A" stroke-width="2"/>
+<text x="412.5" y="409.1" text-anchor="middle" font-size="26" font-weight="600" fill="#F6F5F0">Appel du</text><text x="412.5" y="441.6" text-anchor="middle" font-size="26" font-weight="600" fill="#F6F5F0">modèle</text><text x="412.5" y="480.1" text-anchor="middle" font-size="18" fill="#F6F5F0" opacity="0.85">relances,</text><text x="412.5" y="503.5" text-anchor="middle" font-size="18" fill="#F6F5F0" opacity="0.85">repli sur un</text><text x="412.5" y="526.9" text-anchor="middle" font-size="18" fill="#F6F5F0" opacity="0.85">autre modèle</text>
+<rect x="576.7" y="362.4" width="188.3" height="185.2" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="670.8" y="448.8" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Validation</text><text x="670.8" y="487.2" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">règles nommées</text>
+<rect x="835.0" y="362.4" width="188.3" height="185.2" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="929.2" y="420.8" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Réparation</text><text x="929.2" y="453.3" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">ciblée</text><text x="929.2" y="491.8" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">budget de</text><text x="929.2" y="515.2" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">passes</text>
+<rect x="1093.3" y="362.4" width="188.3" height="185.2" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="1187.5" y="437.1" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Sauvegarde</text><text x="1187.5" y="475.6" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">atomique,</text><text x="1187.5" y="498.9" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">reprise</text>
+<rect x="1351.7" y="362.4" width="188.3" height="185.2" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="1445.8" y="437.1" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Journal</text><text x="1445.8" y="475.6" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">coût, latence,</text><text x="1445.8" y="498.9" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">jetons</text>
+</svg>

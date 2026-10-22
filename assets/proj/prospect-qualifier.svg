@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<defs><marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#C8A24A"/></marker><marker id="arrow-back" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,0 L18,9 L0,18 z" fill="#A32B2B"/></marker></defs>
+<rect width="100%" height="100%" fill="#F6F5F0"/>
+<text x="60" y="100" font-size="44" font-weight="600" fill="#0E1B3A">prospect-qualifier : qualifier un prospect</text>
+<polyline points="300.0,455.0 370.0,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="610.0,455.0 680.0,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="920.0,455.0 990.0,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<polyline points="1230.0,455.0 1300.0,455.0" fill="none" stroke="#C8A24A" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="60.0" y="385.8" width="240.0" height="138.4" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="180.0" y="447.2" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Prospect</text><text x="180.0" y="479.7" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">entrant</text>
+<rect x="370.0" y="385.8" width="240.0" height="138.4" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="490.0" y="463.4" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Workflow n8n</text>
+<rect x="680.0" y="385.8" width="240.0" height="138.4" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="800.0" y="432.5" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">RAG sur</text><text x="800.0" y="465.0" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">Qdrant</text><text x="800.0" y="503.5" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">embeddings locaux</text>
+<rect x="990.0" y="385.8" width="240.0" height="138.4" rx="14" fill="#0E1B3A" stroke="#0E1B3A" stroke-width="2"/>
+<text x="1110.0" y="437.1" text-anchor="middle" font-size="26" font-weight="600" fill="#F6F5F0">LLM</text><text x="1110.0" y="475.6" text-anchor="middle" font-size="18" fill="#F6F5F0" opacity="0.85">score et</text><text x="1110.0" y="498.9" text-anchor="middle" font-size="18" fill="#F6F5F0" opacity="0.85">justification</text>
+<rect x="1300.0" y="385.8" width="240.0" height="138.4" rx="14" fill="#FBFAF6" stroke="#C8A24A" stroke-width="2"/>
+<text x="1420.0" y="448.8" text-anchor="middle" font-size="26" font-weight="600" fill="#0E1B3A">HubSpot</text><text x="1420.0" y="487.2" text-anchor="middle" font-size="18" fill="#5A6274" opacity="0.85">synchronisation</text>
+</svg>

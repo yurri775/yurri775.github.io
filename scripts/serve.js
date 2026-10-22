@@ -3,7 +3,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..", "dist");
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".jpg": "image/jpeg", ".png": "image/png", ".mp3": "audio/mpeg", ".mp4": "video/mp4", ".txt": "text/plain", ".pdf": "application/pdf" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".jpg": "image/jpeg", ".png": "image/png", ".mp3": "audio/mpeg", ".mp4": "video/mp4", ".txt": "text/plain", ".pdf": "application/pdf", ".svg": "image/svg+xml" };
 const port = +process.env.PORT || 4173;
 http.createServer((req, res) => {
   const p = decodeURIComponent(new URL(req.url, "http://x").pathname);

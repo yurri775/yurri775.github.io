@@ -208,7 +208,7 @@ const PROJ = {
   "cascade": { c: "data", g: "autres", u: "https://github.com/yurri775/CascadeProjects", d: ["Simulation logistique de barges : positions de la flotte, taux d'utilisation et couverture de la demande.", "Barge logistics simulation: fleet positions, utilisation and demand coverage."] },
   "nurse-rostering": { c: "recherche", g: "autres", u: "https://github.com/yurri775/nurse-rostering-vns", d: ["Planification des équipes d'infirmiers résolue par une métaheuristique de recherche à voisinage variable (VNS).", "Nurse rostering solved with a Variable Neighbourhood Search metaheuristic."] },
   "face-morphing": { c: "recherche", g: "autres", u: "https://github.com/yurri775/Face-Morphing", d: ["Morphing entre deux visages : points caractéristiques, triangulation de Delaunay, rendu vidéo.", "Morphing between two faces: facial landmarks, Delaunay triangulation, video output."] },
-  "dip-controle": { c: "web", g: "autres", live: "https://yurri775.github.io/dip-controle/", d: ["Site de révision en droit international privé : quiz, cas pratiques en trois niveaux, contrôle blanc chronométré ; testé sur iPhone, lisible même sans JavaScript.", "Private international law revision site: quiz, practice cases in three levels, timed mock exam; tested on iPhone, readable even without JavaScript."] },
+  "dip-controle": { c: "web", g: "autres", priv: true, d: ["Site de révision en droit international privé : quiz, cas pratiques en trois niveaux, contrôle blanc chronométré ; testé sur iPhone, lisible même sans JavaScript.", "Private international law revision site: quiz, practice cases in three levels, timed mock exam; tested on iPhone, readable even without JavaScript."] },
   "eps1.0_ayoub.exe": { c: "web", g: "autres", u: "https://github.com/yurri775/yurri775.github.io", d: ["Ce site : un monde 3D en Three.js, GSAP et Howler, construit et testé à chaque envoi (Playwright, iPhone et ordinateur).", "This site: a 3D world in Three.js, GSAP and Howler, built and tested on every push (Playwright, iPhone and desktop)."] },
 };
 const EXP = [
@@ -541,6 +541,15 @@ const ICONS = {"Python":["M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.
 const STACK = ["Python", "Java", "JavaScript", "SQL", "React", "Spring Boot", "Node.js", "Odoo 17", "Docker", "Nginx", "Linux", "Git", "PostgreSQL", "Pandas", "scikit-learn", "Power BI", "Claude", "LangGraph", "LangChain", "n8n", "Qdrant"];
 // une tuile par technologie : son logo dans sa couleur, ou ses initiales quand il n'y a pas de logo libre
 const techTile = (s) => { const i = ICONS[s]; return `<li style="--brand:#${i ? i[1] : "151417"}">${i ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${i[0]}"/></svg>` : `<b aria-hidden="true">${esc(s.length <= 3 ? s : s.replace(/[^A-Z]/g, "").slice(0, 2))}</b>`}<span>${esc(s)}</span></li>`; };
+// une image par projet : capture tirée du dépôt, ou schéma généré avec spec2diagram (son propre outil)
+const PIMG = {
+  guardloop: "assets/proj/guardloop.svg", "software-company-ia": "assets/proj/software-company-ia.svg", doc2video: "assets/proj/doc2video.webp",
+  spec2diagram: "assets/proj/spec2diagram.svg", "prospect-qualifier": "assets/proj/prospect-qualifier.svg", rag: "assets/proj/rag.svg",
+  "kit-candidature": "assets/proj/kit-candidature.svg", maya: "assets/proj/maya.svg", "test-mately": "assets/proj/test-mately.svg",
+  palapi: "assets/proj/palapi.webp", "idc-academy": "assets/proj/idc-academy.svg", "pptx-pipeline": "assets/proj/pptx-pipeline.svg",
+  "fraud-detection": "assets/proj/fraud-detection.webp", cascade: "assets/proj/cascade.webp", "nurse-rostering": "assets/proj/nurse-rostering.svg",
+  "face-morphing": "assets/proj/face-morphing.svg", "dip-controle": "assets/proj/dip-controle.webp", "eps1.0_ayoub.exe": "assets/proj/portfolio.webp",
+};
 const CATS = [["tout", "all"], ["ia", "ai"], ["web", "web"], ["data", "data"], ["recherche", "research"]];
 let projCat = "tout";
 function renderFakeStack() { const el = $("#fakeStack"); if (el) el.innerHTML = ["Python", "Java", "React", "Spring Boot", "Docker", "PostgreSQL", "Claude"].map((n) => `<li title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[n][0]}"/></svg><span>${n}</span></li>`).join(""); }
@@ -548,7 +557,7 @@ renderFakeStack();
 function renderProjects() {
   const lab = (fr, en) => (L === "fr" ? fr : en);
   const link = (x) => x.priv ? `<span class="tag">${lab("privé", "private")}</span>` : x.live ? `<a href="${x.live}" target="_blank" rel="noopener">${lab("en ligne", "live")} ↗</a>` : `<a href="${x.u}" target="_blank" rel="noopener">code ↗</a>`;
-  const card = ([n, x]) => `<article class="proj" data-c="${x.c}"><header><h3>${esc(n)}</h3>${link(x)}</header><p>${esc(p(x.d))}</p><span class="cat">${esc(p(CATS.find((c) => c[0] === x.c)))}</span></article>`;
+  const card = ([n, x]) => `<article class="proj" data-c="${x.c}">${PIMG[n] ? `<figure class="shot${PIMG[n].endsWith(".svg") ? " diag" : ""}"><img src="${PIMG[n]}" alt="" loading="lazy" decoding="async"></figure>` : ""}<header><h3>${esc(n)}</h3>${link(x)}</header><p>${esc(p(x.d))}</p><span class="cat">${esc(p(CATS.find((c) => c[0] === x.c)))}</span></article>`;
   const all = Object.entries(PROJ), n = (c) => (c === "tout" ? all.length : all.filter(([, x]) => x.c === c).length);
   $("#projects").innerHTML =
     `<h3 class="sec">${lab(`projets · ${all.length}`, `projects · ${all.length}`)}</h3>` +
