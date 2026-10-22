@@ -366,7 +366,8 @@ async function intro() {
 function endIntro() {
   if (introDone) return; introDone = true; store.set("seen", "1"); voiceEl.pause();
   $("#intro").classList.add("out"); document.body.classList.remove("locked");
-  setTimeout(() => $("#intro") && $("#intro").remove(), 700);
+  // navigateur piloté (tests sur serveur sans carte graphique) : la 3D occupe le processeur, on retire l'intro tout de suite
+  if (navigator.webdriver) $("#intro").remove(); else setTimeout(() => $("#intro") && $("#intro").remove(), 700);
   glitch($("#home h1")); if (window.world && window.world.start) world.start();
 }
 $("#enter").onclick = endIntro; $("#skip").onclick = endIntro;
