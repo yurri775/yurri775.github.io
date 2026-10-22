@@ -21,13 +21,15 @@
   <div class="fake">
     <nav class="fake-nav"><b>A.A.</b><span data-i="fkNav1"></span><span data-i="fkNav2"></span><span data-i="fkNav3"></span></nav>
     <div class="fake-body">
-      <img class="fake-ph" src="assets/photo.jpg" alt="" width="600" height="600">
-      <p class="fake-k" data-i="fkKicker"></p>
-      <h1 class="fake-h">Ayoub Amrani</h1>
-      <p class="fake-t" data-i="fkTitle"></p>
-      <ul class="fake-s"><li>Python</li><li>Java · Spring</li><li>React</li><li>SQL</li><li>Docker</li><li>Azure · GCP</li><li>LLM</li></ul>
-      <button class="gate" id="gate"></button>
-      <small class="snd-hint" data-i="sndHint"></small>
+      <div class="fake-txt">
+        <p class="fake-k" data-i="fkKicker"></p>
+        <h1 class="fake-h">Ayoub<br>Amrani</h1>
+        <p class="fake-t" data-i="fkTitle"></p>
+        <dl class="fake-facts"><div><dt data-i="fkF1k"></dt><dd data-i="fkF1"></dd></div><div><dt data-i="fkF2k"></dt><dd data-i="fkF2"></dd></div><div><dt data-i="fkF3k"></dt><dd data-i="fkF3"></dd></div></dl>
+        <ul class="fake-s" id="fakeStack" aria-label="technologies"></ul>
+        <div class="fake-cta"><button class="gate" id="gate"></button><small class="snd-hint" data-i="sndHint"></small></div>
+      </div>
+      <figure class="fake-fig"><img class="fake-ph" src="assets/photo.jpg" alt="Ayoub Amrani" width="600" height="600"><figcaption data-i="fkCap"></figcaption></figure>
     </div>
   </div>
   <pre class="term" id="introTerm" aria-live="polite"></pre>
@@ -41,6 +43,7 @@
   <span class="sp"></span>
   <button id="snd" class="snd" aria-label="son">♪ on</button>
   <div class="sw" role="group" aria-label="Langue"><button data-l="fr">FR</button><button data-l="en">EN</button></div>
+  <a href="assets/cv/CV_Ayoub_Amrani.pdf" target="_blank" rel="noopener" class="cvtop">cv ↓</a>
   <button id="contact" class="contact" data-i="contact"></button>
 </header>
 
@@ -51,13 +54,16 @@
     <div class="paper" aria-hidden="true"></div>
     <div class="bubble" id="bubble" hidden></div>
     <div class="hud">
-      <div class="title-w"><p class="ep">eps1.0_ayoub.exe</p><h1 class="gl" data-text="ayoub amrani">ayoub amrani</h1><p class="lead" data-i="lead"></p></div>
+      <div class="title-w"><p class="ep">eps1.0_ayoub.exe</p><h1 class="gl" data-text="ayoub amrani">ayoub amrani</h1><p class="lead" data-i="lead"></p><nav class="quick" aria-label="accès direct"><a href="#s2" data-i="qParcours"></a><a href="#s3" data-i="qProjets"></a><a href="#s5" data-i="qContact"></a></nav></div>
       <div class="quest"><b data-i="quest"></b><span id="questN">0/5</span><ol class="map" id="map"></ol></div>
     </div>
     <p class="help-w" id="helpW"></p>
     <div class="pad" id="pad"><button id="padL" aria-label="gauche">◀</button><button id="padUp" class="go" hidden></button><button id="padR" aria-label="droite">▶</button></div>
   </div>
 </main>
+
+<!-- contact toujours à portée, sur toutes les pages -->
+<aside class="reach" aria-label="contact"><button type="button" class="mail" data-copy="amraniayoub846@gmail.com">amraniayoub846@gmail.com</button><a href="https://www.linkedin.com/in/ayoub-amrani-773b0714b" target="_blank" rel="noopener">linkedin ↗</a><a href="https://github.com/yurri775" target="_blank" rel="noopener">github ↗</a></aside>
 
 <!-- 01 · reconnaissance -->
 <main class="view st" id="s1">
@@ -91,6 +97,8 @@
     <form class="in" id="cmdForm" autocomplete="off"><label for="cmd">visiteur@ayoub:~$</label><input id="cmd" spellcheck="false" autocapitalize="off" enterkeyhint="go"></form>
     <div class="chips" id="chips"></div>
   </div>
+  <section class="case" id="case" aria-label="étude de cas"></section>
+  <section class="projects" id="projects" aria-label="projets"></section>
   <div class="who corner bl" data-char="travail"></div>
 </main>
 
@@ -102,6 +110,7 @@
     <div><h3 data-i="weak"></h3><ul class="notes" id="notes"></ul></div>
     <div><h3 data-i="langs"></h3><ul class="langs" id="langs"></ul></div>
   </div>
+  <section class="proofs" id="proofs"></section>
   <div class="duo" id="duo4"></div>
   <div class="who corner br" data-char="passions"></div>
 </main>
@@ -110,10 +119,11 @@
   <main class="view st exf" id="s5">
     <header class="st-h"><span class="no">05</span><h2 class="gl" data-gl data-i="s5"></h2></header>
     <p class="voice" data-i="v5"></p>
+    <section class="brief" id="brief"></section>
     <button class="exfil" id="exfil" data-i="exfil"></button>
     <pre class="exlog" id="exlog" aria-live="polite"></pre>
     <div class="links" id="links" hidden>
-      <a href="https://www.linkedin.com/in/ayoub-amrani" target="_blank" rel="noopener">linkedin ↗</a>
+      <a href="https://www.linkedin.com/in/ayoub-amrani-773b0714b" target="_blank" rel="noopener">linkedin ↗</a>
       <a href="https://github.com/yurri775" target="_blank" rel="noopener">github ↗</a>
       <button type="button" class="mail" data-copy="amraniayoub846@gmail.com">amraniayoub846@gmail.com</button>
     </div>
@@ -128,7 +138,7 @@
 </main>
 
 <div id="crash" hidden aria-hidden="true"><pre id="crashTxt"></pre></div>
-<noscript><p class="nojs">Ayoub Amrani · ingénieur IA · amraniayoub846@gmail.com · github.com/yurri775 · linkedin.com/in/ayoub-amrani</p></noscript>
+<noscript><p class="nojs">Ayoub Amrani · ingénieur IA · amraniayoub846@gmail.com · github.com/yurri775 · linkedin.com/in/ayoub-amrani-773b0714b</p></noscript>
 <script src="script.js"></script>
 <script src="world3d.js"></script>
 </body>

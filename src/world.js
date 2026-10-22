@@ -181,6 +181,7 @@ function frame(sd) { return new T3.Matrix4().makeTranslation(sd * SIDE, 0, 0).mu
 const colU = (sd, k) => (sd < 0 ? -(colZ(k) - CW / 2) / M : (colZ(k) + CW / 2) / M);
 const placeAt = (sd, k, v, w = 0) => frame(sd).multiply(new T3.Matrix4().makeTranslation(colU(sd, k), v, w));
 const kit = {}, batches = new Map(), chunks = [];
+let BASEH = 0; // hauteur du soubassement du kit (m), mesurée au chargement
 let VIEW = 170; // distance de vue (au-delà, le brouillard cache tout)
 function put(name, m, tint, lit) {
   const parts = kit[name]; if (!parts) return;
@@ -199,33 +200,34 @@ const STYLES = ["centered_small", "centered_large", "centered_double"];
 const tints = [new T3.Color(0.62, 0.6, 0.62), new T3.Color(0.5, 0.5, 0.56), new T3.Color(0.42, 0.42, 0.48), new T3.Color(0.7, 0.62, 0.6), new T3.Color(0.34, 0.34, 0.4)];
 const escapes = [], cans = [], hydrants = [];
 function building(sd, k0, cols, floors, opts = {}) {
-  const tint = opts.tint || pick(tints), style = opts.style || pick(STYLES), H = floors * 3;
+  // B : hauteur du soubassement ; tout l'immeuble est posé dessus, comme les brownstones (on monte au rez-de-chaussée par un perron)
+  const tint = opts.tint || pick(tints), style = opts.style || pick(STYLES), B = BASEH, H = floors * 3 + B;
   for (let c = 0; c < cols; c++) {
     const k = k0 + c;
-    put("base_standard_01", placeAt(sd, k, 0), tint);
-    // rez-de-chaussée : la porte du lieu, une porte d'immeuble ou une vitrine
-    if (opts.door === k) { put("wall_door_centered_large_01", placeAt(sd, k, 0), tint); put("door_centered_large_01", placeAt(sd, k, 0)); }
+    if (opts.door !== k) put("base_standard_01", placeAt(sd, k, 0), tint);
+    // rez-de-chaussée : le lieu a un mur plein (son entrée est construite à part, voir buildEntrance) ; ailleurs une porte d'immeuble ou une fenêtre
+    if (opts.door === k) put("wall_standard_standard_01", placeAt(sd, k, B), tint);
     else {
       const g = r();
-      if (g < 0.3) { put("wall_door_centered_small_01", placeAt(sd, k, 0), tint); put("door_centered_small_01", placeAt(sd, k, 0)); }
-      else { put("wall_window_centered_large_01", placeAt(sd, k, 0), tint); put("window_centered_large_01", placeAt(sd, k, 0), null, lit(r() < 0.12 ? "red" : r() < 0.7)); }
+      if (g < 0.3) { put("wall_door_centered_small_01", placeAt(sd, k, B), tint); put("door_centered_small_01", placeAt(sd, k, B)); }
+      else { put("wall_window_centered_large_01", placeAt(sd, k, B), tint); put("window_centered_large_01", placeAt(sd, k, B), null, lit(r() < 0.12 ? "red" : r() < 0.7)); }
     }
     for (let f = 1; f < floors; f++) {
       const top = f === floors - 1, n = top ? "03" : f % 2 ? "01" : "02";
-      put(`wall_window_${style}_${n}`, placeAt(sd, k, f * 3), tint); put(`window_${style}_${n}`, placeAt(sd, k, f * 3), null, lit(opts.windows ? opts.windows(f, c) : r() < 0.04 ? "red" : r() < 0.42));
-      put("dado_standard_standard_01", placeAt(sd, k, f * 3 - 0.25), tint);
+      put(`wall_window_${style}_${n}`, placeAt(sd, k, B + f * 3), tint); put(`window_${style}_${n}`, placeAt(sd, k, B + f * 3), null, lit(opts.windows ? opts.windows(f, c) : r() < 0.04 ? "red" : r() < 0.42));
+      put("dado_standard_standard_01", placeAt(sd, k, B + f * 3 - 0.25), tint);
     }
     put("cornice_standard_standard_01", placeAt(sd, k, H), tint); put("crown_standard_standard_01", placeAt(sd, k, H + 0.2), tint);
   }
   // pilastres aux deux bords, couronnés
   for (const k of [k0, k0 + cols]) {
-    const m0 = k === k0 + cols ? placeAt(sd, k - 1, 0).multiply(new T3.Matrix4().makeTranslation(-3, 0, 0)) : placeAt(sd, k, 0);
+    const m0 = k === k0 + cols ? placeAt(sd, k - 1, B).multiply(new T3.Matrix4().makeTranslation(-3, 0, 0)) : placeAt(sd, k, B);
     for (let f = 0; f < floors; f++) put("wall_pier_standard_01", m0.clone().multiply(new T3.Matrix4().makeTranslation(0, f * 3, 0)), tint);
-    put("crown_pier_pedestal_01", m0.clone().multiply(new T3.Matrix4().makeTranslation(0, H + 0.2, 0)), tint);
+    put("crown_pier_pedestal_01", m0.clone().multiply(new T3.Matrix4().makeTranslation(0, floors * 3 + 0.2, 0)), tint);
   }
   // masse de l'immeuble derrière la façade (on la voit de biais et entre deux hauteurs différentes)
   mass.push({ sd, k0, cols, H, tint });
-  if (!opts.door && floors >= 5 && r() < 0.45) escapes.push(placeAt(sd, k0 + Math.floor(r() * cols), 3 + 3.65, 0.85));
+  if (!opts.door && floors >= 5 && r() < 0.45) escapes.push(placeAt(sd, k0 + Math.floor(r() * cols), B + 3 + 3.65, 0.85));
   if (r() < 0.5) cans.push({ sd, z: colZ(k0) + (r() - 0.5) * CW });
 }
 const mass = [];
@@ -268,7 +270,8 @@ LAMPS.forEach((p) => {
 
 /* ---------- chargement des modèles (Poly Haven) ---------- */
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-const load = (src) => new Promise((ok) => loader.load(src, ok, undefined, () => ok(null)));
+const loading = [];
+const load = (src) => { const p = new Promise((ok) => loader.load(src, ok, undefined, () => ok(null))); loading.push(p); return p; };
 // les vitres ne sont pas éclairées par la scène : chacune porte sa couleur (pièce allumée, éteinte, ou rouge)
 const glass = new T3.MeshBasicMaterial({ color: 0xffffff, toneMapped: false });
 const massMat = new T3.MeshStandardMaterial({ color: 0x1a1513, roughness: 0.95 });
@@ -290,7 +293,9 @@ load("assets/city/modular_urban_apartments_facade.glb").then((g) => {
     });
     kit[node.name] = parts; parts.bb = bb;
   });
+  if (kit.base_standard_01) BASEH = kit.base_standard_01.bb.max.y;
   layout();
+  places.forEach((g) => buildEntrance(g));
   for (const b of batches.values()) {
     const im = new T3.InstancedMesh(b.p.geo, b.p.mat, b.mats.length);
     b.mats.forEach((m, i) => { im.setMatrixAt(i, m); im.setColorAt(i, b.cols[i]); });
@@ -299,6 +304,7 @@ load("assets/city/modular_urban_apartments_facade.glb").then((g) => {
   const massGeo = new T3.BoxGeometry(1, 1, 1), mi = new T3.InstancedMesh(massGeo, massMat, mass.length);
   mass.forEach((b, i) => { const zc = colZ(b.k0) + CW / 2 - (b.cols * CW) / 2; mi.setMatrixAt(i, new T3.Matrix4().compose(new T3.Vector3(b.sd * (SIDE + 9), (b.H * M) / 2, zc), new T3.Quaternion(), new T3.Vector3(17.6, b.H * M - 0.1, b.cols * CW))); mi.setColorAt(i, b.tint); });
   mi.receiveShadow = true; scene.add(mi);
+  waterTowers();
   // les accessoires de rue arrivent ensuite
   props();
 });
@@ -318,7 +324,79 @@ function props() {
     const l = new T3.PointLight(0xff7a2a, 60, 22, 1.8); l.position.set(s.x, 3, s.z); scene.add(l); s.light = l;
   });
 }
+// New York : les réservoirs d'eau en bois sur les toits (cuve cerclée, toit conique, pieds en acier)
+function waterTowers() {
+  const spots = mass.filter(() => r() < 0.45);
+  if (!spots.length) return;
+  const cv = document.createElement("canvas"); cv.width = 128; cv.height = 64; const c = cv.getContext("2d");
+  c.fillStyle = "#3b2b20"; c.fillRect(0, 0, 128, 64);
+  for (let x = 0; x < 128; x += 8) { c.fillStyle = `rgba(0,0,0,${0.15 + Math.random() * 0.25})`; c.fillRect(x, 0, 1.5, 64); c.fillStyle = `rgba(120,90,60,${Math.random() * 0.25})`; c.fillRect(x + 2, 0, 4, 64); }
+  c.fillStyle = "#15110e"; [10, 30, 50].forEach((y) => c.fillRect(0, y, 128, 2)); // cerclages
+  const wood = new T3.MeshStandardMaterial({ map: new T3.CanvasTexture(cv), roughness: 0.9 }), steel = new T3.MeshStandardMaterial({ color: 0x1c1d20, roughness: 0.6, metalness: 0.6 });
+  wood.map.colorSpace = T3.SRGBColorSpace; wood.map.wrapS = T3.RepeatWrapping; wood.map.repeat.x = 3;
+  const R = 1.7 * M, Ht = 3.6 * M, legH = 2.6 * M;
+  const tank = new T3.InstancedMesh(new T3.CylinderGeometry(R, R, Ht, 20), wood, spots.length);
+  const roof = new T3.InstancedMesh(new T3.ConeGeometry(R * 1.08, 1.3 * M, 20), wood, spots.length);
+  const legs = new T3.InstancedMesh(new T3.BoxGeometry(0.22 * M, legH, 0.22 * M), steel, spots.length * 4);
+  const m4 = new T3.Matrix4();
+  spots.forEach((b, i) => {
+    const x = b.sd * (SIDE + 5 + r() * 4), z = colZ(b.k0) + CW / 2 - (b.cols * CW) * (0.25 + r() * 0.5), y = b.H * M;
+    tank.setMatrixAt(i, m4.makeTranslation(x, y + legH + Ht / 2, z)); roof.setMatrixAt(i, m4.makeTranslation(x, y + legH + Ht + 0.65 * M, z));
+    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([a, d], j) => legs.setMatrixAt(i * 4 + j, m4.makeTranslation(x + a * R * 0.7, y + legH / 2, z + d * R * 0.7)));
+  });
+  [tank, roof, legs].forEach((o) => { o.castShadow = true; o.receiveShadow = true; o.computeBoundingSphere(); scene.add(o); });
+}
+// New York : la vapeur qui sort des plaques d'égout, au milieu de la chaussée
+const steam = [];
+[-30, -86, -122].forEach((z, v) => {
+  const cap = new T3.Mesh(new T3.CircleGeometry(0.9, 20), new T3.MeshStandardMaterial({ color: 0x18181a, roughness: 0.5, metalness: 0.6 }));
+  cap.rotation.x = -Math.PI / 2; cap.position.set(v % 2 ? 3.5 : -3.5, 0.04, z); scene.add(cap);
+  for (let i = 0; i < 7; i++) {
+    const puff = new T3.Mesh(new T3.PlaneGeometry(1, 1), additive(radial, new T3.Color(0.55, 0.5, 0.52), 0.35));
+    puff.position.copy(cap.position); puff.userData = { x0: cap.position.x, z0: cap.position.z, t: i / 7 }; scene.add(puff); steam.push(puff);
+  }
+});
+// plaques de rue vertes, comme aux carrefours de Manhattan
+[["W 4 ST", -1, -18], ["BROADWAY", 1, -70], ["BLEECKER ST", -1, -112]].forEach(([txt, sd, z]) => {
+  const pole = new T3.Mesh(new T3.CylinderGeometry(0.07, 0.07, 6.2, 8), new T3.MeshStandardMaterial({ color: 0x1a2a1f, roughness: 0.5, metalness: 0.5 }));
+  pole.position.set(sd * (AV + 0.8), 3.1 + 0.35, z); scene.add(pole);
+  const s = label(txt, 0.62, { fg: "#f4f4ee", glow: "rgba(0,0,0,0)", color: new T3.Color(0.9, 0.9, 0.9) }); s.material.toneMapped = true;
+  const plate = new T3.Mesh(new T3.BoxGeometry(s.geometry.parameters.width * 0.92, 0.56, 0.06), new T3.MeshStandardMaterial({ color: 0x1e6a3c, roughness: 0.45, metalness: 0.2 }));
+  plate.position.set(sd * (AV + 0.8), 6.3, z); plate.rotation.y = Math.PI / 2; s.position.set(0, 0, 0.035); plate.add(s);
+  const back = s.clone(); back.position.z = -0.035; back.rotation.y = Math.PI; plate.add(back); scene.add(plate);
+});
 const STOVES = [{ x: -(SIDE - 2.5), z: -52 }, { x: SIDE - 3, z: -128 }];
+
+/* ---------- entrée d'un lieu : perron de brownstone, porte double en bois, encadrement de pierre, imposte rouge ---------- */
+const stone = new T3.MeshStandardMaterial({ color: 0x4a3328, roughness: 0.85 }), iron = new T3.MeshStandardMaterial({ color: 0x0e0f11, roughness: 0.45, metalness: 0.7 });
+const woodDoor = new T3.MeshStandardMaterial({ color: 0x2b1a12, roughness: 0.55 }), brass = new T3.MeshStandardMaterial({ color: 0xb08a4a, roughness: 0.3, metalness: 0.9 });
+function buildEntrance(g) {
+  const u = M, top = BASEH * u, box = (w, h, d, mat, x, y, z) => { const m = new T3.Mesh(new T3.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; g.add(m); return m; };
+  // perron : 6 marches de la porte au trottoir (0,35 = hauteur du trottoir)
+  const n = 5, d = 0.3 * u, z0 = 0.15 * u, rise = (top - 0.35) / n, W = 2.3 * u;
+  for (let i = 0; i < n; i++) { const h = top - i * rise; box(W, h, d, stone, 0, h / 2, z0 + (i + 0.5) * d); }
+  // rampes en fer : main courante inclinée et barreaux
+  const run = n * d, slope = Math.atan2(top - 0.35, run);
+  for (const sx of [-1, 1]) {
+    const x = sx * (W / 2 - 0.08 * u), L = Math.hypot(run, top - 0.35);
+    const rail = box(0.07 * u, 0.07 * u, L, iron, x, (top + 0.35) / 2 + 0.95 * u, z0 + run / 2); rail.rotation.x = slope;
+    for (let j = 0; j < n; j++) { const z = z0 + (j + 0.5) * d, y = top - j * rise; box(0.035 * u, 0.95 * u, 0.035 * u, iron, x, y + 0.47 * u, z); }
+  }
+  // encadrement : deux pilastres et un entablement, porte double avec panneaux et poignées
+  const dw = 1.4 * u, dh = 2.25 * u, y0 = top;
+  for (const sx of [-1, 1]) box(0.3 * u, dh + 0.42 * u, 0.3 * u, stone, sx * (dw / 2 + 0.15 * u), y0 + (dh + 0.42 * u) / 2, 0.15 * u);
+  box(dw + 0.9 * u, 0.24 * u, 0.4 * u, stone, 0, y0 + dh + 0.54 * u, 0.2 * u);
+  const transom = box(dw, 0.34 * u, 0.06 * u, neonMat, 0, y0 + dh + 0.2 * u, 0.04 * u); // imposte vitrée, éclairée en rouge de l'intérieur
+  for (const sx of [-1, 1]) {
+    const leaf = box(dw / 2 - 0.03 * u, dh, 0.1 * u, woodDoor, sx * (dw / 4), y0 + dh / 2, 0.05 * u);
+    for (const py of [0.3, 0.72]) box(dw / 2 - 0.22 * u, dh * 0.3, 0.04 * u, woodDoor, sx * (dw / 4), y0 + dh * py, 0.12 * u);
+    const knob = new T3.Mesh(new T3.SphereGeometry(0.05 * u, 10, 8), brass); knob.position.set(sx * 0.12 * u, y0 + dh * 0.48, 0.14 * u); g.add(knob);
+  }
+  g.userData.lintel.visible = false;
+  g.userData.light.position.set(0, top + 1.2 * u, 1.6 * u);
+  g.userData.sign.position.y = y0 + dh + 1.6 * u;
+  g.userData.frag.position.y = top + 1.2 * u; g.userData.fragY = top + 1.2 * u;
+}
 
 /* ---------- les 5 lieux : enseigne au néon, porte encadrée de rouge, fragment à récupérer ---------- */
 const places = [];
@@ -328,10 +406,10 @@ function buildPlace(p, i) {
   // repère du lieu : au pied de la porte, tourné vers la rue (z+ local = vers la chaussée)
   const g = new T3.Group(); g.userData.i = i;
   g.position.set(p.side * SIDE, 0, p.z); g.rotation.y = p.side < 0 ? Math.PI / 2 : -Math.PI / 2;
-  // la porte (2,08 × 2,81 m) encadrée d'un tube néon rouge
-  const dw = 2.2 * M, dh = 2.9 * M, t = 0.13;
-  [[0, dh, dw + t, t], [-dw / 2, dh / 2, t, dh], [dw / 2, dh / 2, t, dh]].forEach(([x, y, w, h]) => { const b = new T3.Mesh(new T3.BoxGeometry(w, h, t), neonMat); b.position.set(x, y + 0.35, 0.35); g.add(b); });
-  const light = new T3.PointLight(0xff2020, 40, 18, 1.6); light.position.set(0, 4.5, 3); g.add(light); g.userData.light = light;
+  // la porte vient du kit d'immeubles (vitres éclairées en rouge) ; au-dessus, un trait de néon. Recalé sur la porte réelle au chargement du kit
+  const dw = 2.2 * M, dh = 2.9 * M;
+  const lintel = new T3.Mesh(new T3.BoxGeometry(dw * 0.9, 0.12, 0.12), neonMat); lintel.position.set(0, dh + 0.5, 0.3); g.add(lintel); g.userData.lintel = lintel;
+  const light = new T3.PointLight(0xff2020, 30, 14, 1.6); light.position.set(0, 2.2, 2.5); g.add(light); g.userData.light = light;
   const sign = label(`0${i + 1} · ${wt("names")[i]}`, 1.25); sign.position.set(0, dh + 1.5, 0.5); g.add(sign); g.userData.sign = sign;
   const roofY = p.floors * 3 * M;
   if (p.kind === "servers" || p.kind === "antenna") { const n = p.kind === "antenna" ? 24 : 12; const ant = new T3.Mesh(new T3.CylinderGeometry(0.12, 0.2, n, 8), new T3.MeshStandardMaterial({ color: 0x24262c, metalness: 0.7, roughness: 0.4 })); ant.position.set(0, roofY + n / 2, -6); g.add(ant); const tip = new T3.Mesh(new T3.SphereGeometry(0.5, 12, 12), neonMat); tip.position.set(0, roofY + n + 0.3, -6); g.add(tip); g.userData.blink = tip; }
@@ -602,11 +680,12 @@ function tick(now) {
     for (let i = 0; i < rainN; i++) { const o = i * 6; let y = rainPos[o + 1] - dt * 28; if (y < 0) y += 30; rainPos[o + 1] = y; rainPos[o + 4] = y - 0.9; }
     rainGeo.attributes.position.needsUpdate = true;
     skyline.forEach((l) => (l.visible = Math.sin(tt * 2 + l.userData.ph) > 0));
+    steam.forEach((p) => { const u = (p.userData.t = (p.userData.t + dt * 0.18) % 1); p.position.set(p.userData.x0 + Math.sin(u * 5 + p.userData.z0) * 0.6, 0.3 + u * 7, p.userData.z0 + u * 1.2); p.scale.setScalar(1.2 + u * 5); p.material.opacity = 0.32 * Math.sin(u * Math.PI); p.lookAt(camera.position); });
     STOVES.forEach((s) => { if (!s.fire) return; const k = 0.75 + Math.sin(tt * 13 + s.z) * 0.12 + Math.random() * 0.13; s.fire.material.opacity = k; s.light.intensity = 60 * k; s.fire.lookAt(camera.position.x, s.fire.position.y, camera.position.z); });
     places.forEach((g) => {
       if (g.userData.blink) g.userData.blink.visible = Math.floor(tt * 1.5) % 2 === 0;
       if (g.userData.flicker) g.userData.flicker.material.opacity = Math.random() < 0.03 ? 0.15 : 1; // néon qui grésille
-      const fr = g.userData.frag; fr.rotation.y += dt * 1.6; fr.position.y = 3 + Math.sin(tt * 2 + g.userData.i) * 0.35;
+      const fr = g.userData.frag; fr.rotation.y += dt * 1.6; fr.position.y = (g.userData.fragY || 3) + Math.sin(tt * 2 + g.userData.i) * 0.35;
     });
   }
   if (hq) composer.render(); else renderer.render(scene, camera);
@@ -644,4 +723,9 @@ window.world = {
 pos.set(START.x, 0, START.z); camera.position.set(4, 62, 50);
 resize(); world.relabel(); renderMap();
 if (introDone) world.start();
+// pendant l'intro, on prépare les shaders de la rue : sinon tout se compile d'un coup au clic sur « entrer » et la page se fige
+Promise.all(loading).then(() => setTimeout(() => {
+  if (introDone || !renderer.compileAsync) return;
+  renderer.compileAsync(scene, camera).catch(() => {});
+}, 0));
 requestAnimationFrame(tick);

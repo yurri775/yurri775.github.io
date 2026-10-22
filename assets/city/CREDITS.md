@@ -9,3 +9,5 @@ Ils ont été réduits à 512 ou 1024 px, convertis en WebP et compressés avec 
 - cobblestone_street_night : HDRI de nuit (éclairage d'ambiance et reflets)
 
 Le personnage (assets/models/hero.glb) est le personnage « Ch33 » de Mixamo (Adobe), téléchargé par Ayoub avec son compte ; ses animations (repos, marche, course, acquiescement) viennent du Xbot des exemples de Three.js, transposées sur son squelette.
+
+Les logos de la pile technique (page 03) viennent de Simple Icons (CC0, simpleicons.org) ; les marques appartiennent à leurs propriétaires.
