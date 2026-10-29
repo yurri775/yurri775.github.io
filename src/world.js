@@ -118,7 +118,11 @@ const finish = new ShaderPass({
     }`,
 });
 composer.addPass(finish);
-let hq = true; // qualité haute ; réduite si la machine peine (voir la boucle)
+let hq = true; // qualité haute (ombres, définition) ; réduite si la machine peine (voir la boucle)
+// post-traitement (bloom + cible de rendu HalfFloat multi-échantillonnée) DÉSACTIVÉ par défaut :
+// sur beaucoup de GPU (desktop compris) il rend la scène noire ou partielle alors que le reste marche.
+// Sans lui la ville reste belle (lampadaires, lune rouge, matériaux émissifs) et s'affiche partout.
+let useBloom = false;
 
 /* ---------- ciel et lune rouge ; l'éclairage d'ambiance vient d'une vraie photo de rue la nuit (HDRI Poly Haven) ---------- */
 const sky = new T3.Mesh(new T3.SphereGeometry(700, 32, 16), new T3.ShaderMaterial({
@@ -722,7 +726,7 @@ function tick(now) {
       const fr = g.userData.frag; fr.rotation.y += dt * 1.6; fr.position.y = (g.userData.fragY || 3) + Math.sin(tt * 2 + g.userData.i) * 0.35;
     });
   }
-  if (hq) composer.render(); else renderer.render(scene, camera);
+  if (hq && useBloom) composer.render(); else renderer.render(scene, camera);
   // surveillance du rendu (hors tests pilotés) : scène noire -> rendu simple, puis accueil 2D si toujours noir ; FPS au sol -> accueil 2D
   if (!navigator.webdriver && !fellBack) {
     renderedFrames++;
