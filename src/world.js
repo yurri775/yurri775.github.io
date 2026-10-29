@@ -56,7 +56,15 @@ const touch = matchMedia("(hover: none)").matches;
 const W = $("#world"), bubble = $("#bubble");
 
 /* ---------- rendu : anti-crénelage, halo, vignettage, grain ---------- */
-const renderer = new T3.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+let renderer;
+try {
+  renderer = new T3.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+} catch (e) {
+  // le contexte WebGL n'a pas pu être créé (accélération matérielle désactivée, GPU bloqué…) :
+  // on bascule sur l'accueil 2D (rue fixe + accès direct) plutôt qu'un écran noir
+  W.classList.add("no3d");
+  throw e;
+}
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, touch ? 1.5 : 1.75));
 renderer.setClearColor(NIGHT);
 renderer.toneMapping = T3.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;

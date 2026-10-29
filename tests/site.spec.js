@@ -132,3 +132,22 @@ test("accessibilité : aucune violation grave", async ({ page }) => {
   const serious = res.violations.filter((v) => ["serious", "critical"].includes(v.impact));
   expect(serious.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
 });
+
+test("sans WebGL : l'accueil 2D de repli s'affiche et reste navigable", async ({ page }) => {
+  // on coupe le WebGL avant tout script (cas d'un PC sans accélération matérielle) : le site doit montrer l'accueil 2D, pas un écran noir
+  await page.addInitScript(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, ...a) {
+      return String(type).includes("webgl") ? null : orig.call(this, type, ...a);
+    };
+  });
+  const errors = await open(page);
+  await page.locator("#skip").click();                        // passer l'intro
+  await expect(page.locator("#world")).toHaveClass(/no3d/);   // repli activé
+  await expect(page.locator("canvas.gl3d")).toHaveCount(0);   // aucune 3D chargée
+  await expect(page.locator("#home h1")).toBeVisible();       // « ayoub amrani » lisible
+  await page.locator('.quick a[href="#s3"]').click();         // accès direct « projets »
+  await expect(page).toHaveURL(/#s3$/);
+  await expect(page.locator("#s3 h2")).toBeVisible();
+  expect(errors).toEqual([]);
+});

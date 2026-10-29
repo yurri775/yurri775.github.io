@@ -704,7 +704,20 @@ const QR = /[?&]qr\b/.test(location.search);
   if (!store.get("vu")) { store.set("vu", "1"); hit("visiteurs"); }
   if (QR) { const src = (new URLSearchParams(location.search).get("qr") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 30); hit("qr" + (src ? "-" + src : "")); }
 })();
-function loadWorld() { const w = document.createElement("script"); w.src = document.querySelector('meta[name="world3d"]').content; document.body.appendChild(w); }
+// WebGL dispo ? (accélération matérielle active, GPU non bloqué) — sinon pas de monde 3D
+function webglOK() {
+  try { const c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl"))); }
+  catch (e) { return false; }
+}
+function loadWorld() {
+  const W = $("#world");
+  // sans WebGL (ex. accélération matérielle coupée sur un PC), on montre l'accueil 2D — rue fixe + accès direct — au lieu d'un écran noir
+  if (!webglOK()) { if (W) W.classList.add("no3d"); return; }
+  const w = document.createElement("script");
+  w.src = document.querySelector('meta[name="world3d"]').content;
+  w.onerror = () => { if (W) W.classList.add("no3d"); }; // le bundle 3D n'a pas pu se charger
+  document.body.appendChild(w);
+}
 if (QR) addEventListener("load", () => setTimeout(loadWorld, 1200)); else loadWorld();
 if (QR) { if (!location.hash) history.replaceState(null, "", location.pathname + location.search + "#s1"); endIntro(); show(location.hash.slice(1)); }
 else intro();

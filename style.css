@@ -762,6 +762,9 @@ body:has(#s5.on) .reach { display: none; }
 }
 .world.no3d { background: #07080b url("assets/bg/s2.webp") center / cover; }
 .world.no3d canvas.gl3d { visibility: hidden; }
+/* repli 2D : on retire les éléments propres au jeu 3D (quête, aide clavier, joystick) ; reste un accueil lisible : titre + accroche + accès direct sur fond de rue */
+.world.no3d .quest, .world.no3d .help-w, .world.no3d .pad { display: none; }
+.world.no3d .title-w { opacity: 1; transform: none; }
 /* image du projet en tête de fiche : capture, ou schéma (fond blanc, entier) */
 .proj { padding-top: 0; overflow: hidden; }
 .proj .shot { margin: 0 -18px 4px; aspect-ratio: 16 / 9; background: #fff; border-bottom: 1px solid var(--line); overflow: hidden; }
