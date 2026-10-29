@@ -704,15 +704,17 @@ const QR = /[?&]qr\b/.test(location.search);
   if (!store.get("vu")) { store.set("vu", "1"); hit("visiteurs"); }
   if (QR) { const src = (new URLSearchParams(location.search).get("qr") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 30); hit("qr" + (src ? "-" + src : "")); }
 })();
-// WebGL dispo ? (accélération matérielle active, GPU non bloqué) — sinon pas de monde 3D
-function webglOK() {
-  try { const c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl"))); }
+// WebGL disponible ? (même en rendu logiciel : on tente quand même la 3D, c'est le rendu lui-même qui s'adaptera)
+function hasWebGL() {
+  try { const c = document.createElement("canvas"); return !!(c.getContext("webgl") || c.getContext("experimental-webgl")); }
   catch (e) { return false; }
 }
 function loadWorld() {
   const W = $("#world");
-  // sans WebGL (ex. accélération matérielle coupée sur un PC), on montre l'accueil 2D — rue fixe + accès direct — au lieu d'un écran noir
-  if (!webglOK()) { if (W) W.classList.add("no3d"); return; }
+  // seul cas où l'on renonce d'emblée à la 3D : aucun WebGL (ou ?force2d) -> accueil 2D clair au lieu d'un écran noir.
+  // Si le GPU gère le WebGL mais pas le post-traitement (rendu noir) ou s'il est trop lent, c'est world.js qui adapte au rendu.
+  const force2d = new URLSearchParams(location.search).has("force2d");
+  if (force2d || !hasWebGL()) { if (W) W.classList.add("no3d"); return; }
   const w = document.createElement("script");
   w.src = document.querySelector('meta[name="world3d"]').content;
   w.onerror = () => { if (W) W.classList.add("no3d"); }; // le bundle 3D n'a pas pu se charger

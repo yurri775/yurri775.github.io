@@ -61,9 +61,31 @@ try {
   renderer = new T3.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
 } catch (e) {
   // le contexte WebGL n'a pas pu être créé (accélération matérielle désactivée, GPU bloqué…) :
-  // on bascule sur l'accueil 2D (rue fixe + accès direct) plutôt qu'un écran noir
+  // on bascule sur l'accueil 2D (photo + accès direct) plutôt qu'un écran noir
   W.classList.add("no3d");
   throw e;
+}
+
+// ---- repli 2D automatique quand le GPU ne peut pas rendre la scène (rendu noir, ou trop lent) ----
+let fellBack = false, blackChecks = 0, renderedFrames = 0, slow2 = 0;
+function fallTo2D() {            // on arrête la 3D et on montre l'accueil 2D clair (.no3d masque le canvas)
+  if (fellBack) return; fellBack = true;
+  W.classList.add("no3d");
+  try { renderer.dispose(); } catch (e) {}
+}
+// une scène correcte a toujours des points lumineux (néons, lune rouge, route éclairée) ;
+// si aucun pixel n'est notable, le rendu est noir (ex. post-traitement en demi-flottant non géré par ce GPU)
+function frameIsBlack() {
+  try {
+    const gl = renderer.getContext(), w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+    if (!w || !h) return false;
+    const px = new Uint8Array(4); let max = 0;
+    for (let gy = 1; gy <= 5; gy++) for (let gx = 0; gx < 12; gx++) {
+      gl.readPixels(Math.floor(w * (gx + 0.5) / 12), Math.floor(h * gy / 6), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+      max = Math.max(max, px[0], px[1], px[2]);
+    }
+    return max < 10;
+  } catch (e) { return false; }
 }
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, touch ? 1.5 : 1.75));
 renderer.setClearColor(NIGHT);
@@ -606,6 +628,7 @@ function lowQuality() {
   resize();
 }
 function tick(now) {
+  if (fellBack) return;                 // repli 2D en cours : on arrête la boucle 3D
   requestAnimationFrame(tick);
   const raw = (now - last) / 1000 || 0, dt = Math.min(0.25, raw); last = now;
   syncAudio();
@@ -700,6 +723,15 @@ function tick(now) {
     });
   }
   if (hq) composer.render(); else renderer.render(scene, camera);
+  // surveillance du rendu (hors tests pilotés) : scène noire -> rendu simple, puis accueil 2D si toujours noir ; FPS au sol -> accueil 2D
+  if (!navigator.webdriver && !fellBack) {
+    renderedFrames++;
+    if (blackChecks < 2 && renderedFrames === (blackChecks === 0 ? 30 : 90)) {
+      if (frameIsBlack()) { blackChecks++; if (hq) lowQuality(); else fallTo2D(); }
+      else blackChecks = 2;
+    }
+    if (!hq && raw > 0) { slow2 += raw > 0.09 ? 1 : -1; slow2 = Math.max(0, slow2); if (slow2 > 90) fallTo2D(); }
+  }
 }
 
 /* ---------- interface publique ---------- */

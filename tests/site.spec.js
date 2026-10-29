@@ -142,12 +142,22 @@ test("sans WebGL : l'accueil 2D de repli s'affiche et reste navigable", async ({
     };
   });
   const errors = await open(page);
-  await page.locator("#skip").click();                        // passer l'intro
-  await expect(page.locator("#world")).toHaveClass(/no3d/);   // repli activé
-  await expect(page.locator("canvas.gl3d")).toHaveCount(0);   // aucune 3D chargée
-  await expect(page.locator("#home h1")).toBeVisible();       // « ayoub amrani » lisible
-  await page.locator('.quick a[href="#s3"]').click();         // accès direct « projets »
+  await page.locator("#skip").click();                              // passer l'intro
+  await expect(page.locator("#world")).toHaveClass(/no3d/);         // repli activé
+  await expect(page.locator("canvas.gl3d")).toHaveCount(0);         // aucune 3D chargée
+  await expect(page.locator(".no3d-home .n3-h")).toHaveText("Ayoub Amrani"); // accueil 2D clair lisible
+  await expect(page.locator(".no3d-home img")).toBeVisible();       // photo présente
+  await page.locator('.no3d-home .n3-nav a[href="#s3"]').click();   // accès direct « projets »
   await expect(page).toHaveURL(/#s3$/);
   await expect(page.locator("#s3 h2")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("?force2d : l'accueil 2D s'affiche même avec WebGL (aperçu / machines sans 3D)", async ({ page }) => {
+  const errors = await open(page, "?force2d");
+  await page.locator("#skip").click();
+  await expect(page.locator("#world")).toHaveClass(/no3d/);
+  await expect(page.locator("canvas.gl3d")).toHaveCount(0);         // 3D non chargée
+  await expect(page.locator(".no3d-home .n3-h")).toBeVisible();
   expect(errors).toEqual([]);
 });

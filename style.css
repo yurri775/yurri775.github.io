@@ -760,11 +760,25 @@ body:has(#s5.on) .reach { display: none; }
   .fake-s li { width: 36px; height: 36px; border-radius: 10px; }
   .fake-s svg { width: 18px; height: 18px; }
 }
-.world.no3d { background: #07080b url("assets/bg/s2.webp") center / cover; }
-.world.no3d canvas.gl3d { visibility: hidden; }
-/* repli 2D : on retire les éléments propres au jeu 3D (quête, aide clavier, joystick) ; reste un accueil lisible : titre + accroche + accès direct sur fond de rue */
-.world.no3d .quest, .world.no3d .help-w, .world.no3d .pad { display: none; }
-.world.no3d .title-w { opacity: 1; transform: none; }
+/* ---------- repli 2D : accueil clair en couleur (photo + accès direct) quand la 3D ne peut pas s'afficher ---------- */
+.no3d-home { display: none; }
+.world.no3d { background: radial-gradient(120% 90% at 85% 8%, #fff 0%, #f4f3ef 45%, #ecebe5 100%); overflow: auto; }
+.world.no3d canvas.gl3d, .world.no3d .hud, .world.no3d .help-w, .world.no3d .pad, .world.no3d .paper, .world.no3d .bubble { display: none !important; }
+.world.no3d .no3d-home { display: flex; }
+.no3d-home { position: absolute; inset: 0; align-items: center; justify-content: center; gap: clamp(28px, 6vw, 72px); padding: max(92px, 13vh) max(20px, 6vw) 48px; box-sizing: border-box; pointer-events: auto; }
+.no3d-home .n3-txt { max-width: 36ch; }
+.no3d-home .n3-k { margin: 0 0 12px; font: 800 12px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: #c0161e; }
+.no3d-home .n3-h { margin: 0; font: 700 clamp(40px, 7vw, 70px)/1.02 var(--sans); letter-spacing: -.035em; color: #15171b; }
+.no3d-home .n3-t { margin: 16px 0 26px; font: 400 clamp(15px, 1.8vw, 18px)/1.55 var(--sans); color: #4a4f57; }
+.no3d-home .n3-nav { display: flex; flex-wrap: wrap; gap: 10px; }
+.no3d-home .n3-nav a { font: 600 14px var(--mono); color: #15171b; text-decoration: none; padding: 11px 17px; border: 1px solid #cfc9bb; background: #fff; transition: background .2s, color .2s, border-color .2s; }
+.no3d-home .n3-nav a::before { content: "> "; color: #c0161e; }
+.no3d-home .n3-nav a:hover, .no3d-home .n3-nav a:focus-visible { background: #15171b; color: #fff; border-color: #15171b; }
+.no3d-home .n3-nav a.cv { border-color: #c0161e; }
+.no3d-home .n3-nav a.cv::before { content: ""; }
+.no3d-home .n3-fig { margin: 0; flex: 0 0 auto; }
+.no3d-home .n3-fig img { width: clamp(220px, 28vw, 360px); aspect-ratio: 1; object-fit: cover; border-radius: 16px; box-shadow: 0 18px 50px rgba(0, 0, 0, .18); }
+@media (max-width: 760px) { .no3d-home { flex-direction: column-reverse; justify-content: center; gap: 26px; text-align: left; } .no3d-home .n3-fig img { width: 150px; } .no3d-home .n3-txt { max-width: none; } }
 /* image du projet en tête de fiche : capture, ou schéma (fond blanc, entier) */
 .proj { padding-top: 0; overflow: hidden; }
 .proj .shot { margin: 0 -18px 4px; aspect-ratio: 16 / 9; background: #fff; border-bottom: 1px solid var(--line); overflow: hidden; }
