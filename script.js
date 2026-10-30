@@ -53,6 +53,7 @@ const T = {
     duo4: [["d", "Mets que tu parles japonais."], ["a", "Arabe, français, anglais C1."], ["d", "Personne ne vérifiera."], ["a", "Moi, si. C'est le principe."]],
     notes: [
       ["Jeux vidéo", "les systèmes à règles, et l'endroit exact où elles cèdent."],
+      ["Cuisine", "la précision d'abord, l'improvisation ensuite."],
       ["Voyage", "Maroc, France : il s'adapte vite à un nouvel environnement."],
       ["Recherche", "lit la publication jusqu'aux annexes avant d'y croire."],
     ],
@@ -128,6 +129,7 @@ const T = {
     duo4: [["d", "Say you speak Japanese."], ["a", "Arabic, French, English C1."], ["d", "Nobody will check."], ["a", "I will. That's the point."]],
     notes: [
       ["Video games", "systems with rules, and the exact spot where they give way."],
+      ["Cooking", "precision first, improvisation second."],
       ["Travel", "Morocco, France: adapts fast to a new environment."],
       ["Research", "reads the paper down to the appendix before believing it."],
     ],
