@@ -11,7 +11,7 @@ const SRC = { who: CHARS[0].src, parcours: CHARS[1].src, travail: CHARS[2].src, 
 const T = {
   fr: {
     skip: "passer ›", enter: "[ entrer ]", contact: "./exfiltrer",
-    gate: "Voir le portfolio ›", gateBack: "Voir le portfolio ›", sndHint: "🔊 avec le son, c'est mieux", wipe: "connexion…",
+    gate: "Voir le portfolio ›", gateBack: "Voir le portfolio ›", fkCV: "Recruteur pressé ? Voir mon parcours →", sndHint: "🔊 avec le son, c'est mieux", wipe: "connexion…",
     fkNav1: "Projets", fkNav2: "Parcours", fkNav3: "Contact", fkKicker: "Ingénieur logiciel · disponible",
     fkTitle: "Je conçois des applications web, des chaînes de données et des systèmes d'IA, et je les mets en production.",
     fkF1k: "formation", fkF1: "Master 2 Informatique, INSA", fkF2k: "base", fkF2: "Valenciennes, France", fkF3k: "langues", fkF3: "FR · AR · EN C1", fkCap: "Valenciennes · 2026",
@@ -87,7 +87,7 @@ const T = {
   },
   en: {
     skip: "skip ›", enter: "[ enter ]", contact: "./exfiltrate",
-    gate: "View portfolio ›", gateBack: "View portfolio ›", sndHint: "🔊 better with sound on", wipe: "connecting…",
+    gate: "View portfolio ›", gateBack: "View portfolio ›", fkCV: "In a hurry? See my background →", sndHint: "🔊 better with sound on", wipe: "connecting…",
     fkNav1: "Projects", fkNav2: "Background", fkNav3: "Contact", fkKicker: "Software engineer · available",
     fkTitle: "I design web applications, data pipelines and AI systems, and I put them into production.",
     fkF1k: "education", fkF1: "Master's in CS, INSA", fkF2k: "based in", fkF2: "Valenciennes, France", fkF3k: "languages", fkF3: "FR · AR · EN C1", fkCap: "Valenciennes · 2026",
@@ -371,6 +371,8 @@ function endIntro() {
   glitch($("#home h1")); if (window.world && window.world.start) world.start();
 }
 $("#enter").onclick = endIntro; $("#skip").onclick = endIntro;
+// voie rapide recruteur : on saute le jeu et on va droit au contenu (station 01 → parcours, projets, contact)
+$("#toCV").onclick = (e) => { e.preventDefault(); endIntro(); location.hash = "s1"; };
 
 /* ============ navigation ============ */
 const views = ["home", "s1", "s2", "s3", "s4", "s5"];

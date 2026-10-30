@@ -260,6 +260,10 @@ html[lang="en"] body.night .lead::after { content: " (it's late.)"; }
 .gate { margin-top: 26px; font: 600 16px var(--sans); background: #15171b; color: #fff; border: 0; border-radius: 999px; padding: 14px 26px; box-shadow: 0 8px 24px rgba(0, 0, 0, .15); transition: transform .2s; }
 .gate:hover { transform: translateY(-2px); }
 .snd-hint { color: #8b9097; font-size: 12px; margin-top: 10px; }
+/* voie rapide recruteur : lien secondaire discret à côté du bouton principal */
+.to-cv { margin-top: 26px; font: 600 14px var(--sans); color: #15171b; text-decoration: none; border-bottom: 1.5px solid rgba(21, 23, 27, .28); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+.to-cv:hover, .to-cv:focus-visible { color: #c0161e; border-color: #c0161e; }
+@media (max-width: 520px) { .to-cv { margin-top: 2px; font-size: 13px; } }
 .snd { font-family: var(--mono); font-size: 12px; background: none; border: 1px solid var(--line); color: var(--muted); padding: 6px 9px; }
 .snd.on { color: var(--text); }
 

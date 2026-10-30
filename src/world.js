@@ -654,7 +654,7 @@ function tick(now) {
     mv.subVectors(target, pos); mv.y = 0;
     if (mv.length() < 0.4) { mv.set(0, 0, 0); target = null; if (autoEnter !== null) { const i = autoEnter; autoEnter = null; enterPlace(i); } }
   }
-  const moving = mv.lengthSq() > 0.01, running = moving && !shift && (target || push > 0.6);
+  const moving = mv.lengthSq() > 0.01, running = moving && !shift && (target || push > 0.3); // au joystick, on court dès qu'on avance franchement (la marche lente rendait mal)
   if (moving) {
     mv.normalize(); pos.addScaledVector(mv, (running ? RUN : WALK) * dt);
     pos.x = Math.max(-SIDE + 1.2, Math.min(SIDE - 1.2, pos.x)); pos.z = Math.max(END, Math.min(ZTOP - 4, pos.z));
@@ -678,10 +678,11 @@ function tick(now) {
   byDist.forEach((o) => (o.d = Math.abs(o.p.z - pos.z) + Math.abs(o.p.x - pos.x) * 0.3)); byDist.sort((a, b) => a.d - b.d);
   lampLights.forEach((l, i) => l.position.set(byDist[i].p.x, 3.5 * M, byDist[i].p.z));
   // caméra à la troisième personne : derrière, un peu au-dessus, avec retard ; recule sur écran étroit ; ne rentre pas dans les murs
-  const dist = 11 * (camera.aspect < 0.8 ? 1.4 : 1);
-  camGoal.set(pos.x + Math.sin(yaw) * Math.cos(pitch) * dist, 1.6 + Math.sin(pitch) * dist + 2, pos.z + Math.cos(yaw) * Math.cos(pitch) * dist);
+  const port = camera.aspect < 0.85; // écran vertical (mobile) : on remonte la caméra et on vise plus bas pour remplir le cadre de ville, pas de ciel vide
+  const dist = 11 * (port ? 1.4 : 1);
+  camGoal.set(pos.x + Math.sin(yaw) * Math.cos(pitch) * dist, 1.6 + Math.sin(pitch) * dist + 2 + (port ? 1.1 : 0), pos.z + Math.cos(yaw) * Math.cos(pitch) * dist);
   camGoal.x = Math.max(-SIDE + 0.8, Math.min(SIDE - 0.8, camGoal.x));
-  look.set(pos.x - Math.sin(yaw) * 4, HERO_H * 0.85, pos.z - Math.cos(yaw) * 4);
+  look.set(pos.x - Math.sin(yaw) * 4, HERO_H * (port ? 0.5 : 0.85), pos.z - Math.cos(yaw) * 4);
   // ouverture : un plan aérien sur toute la rue qui redescend derrière le personnage
   if (cine.k > 0) { aerial.set(pos.x + 4, 62, pos.z + 46); aerialLook.set(0, 6, -90); camGoal.lerp(aerial, cine.k); look.lerp(aerialLook, cine.k); }
   // entrée : la caméra glisse vers la porte
